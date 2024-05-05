@@ -206,10 +206,10 @@ fun DrawerSheet(scope: CoroutineScope, navController: NavController, drawerState
             R.drawable.baseline_add_card_24, "Мои Продажи", "Sale"
         ),
         DrawerItems(
-            R.drawable.baseline_add_shopping_cart_24, "Мои Покупки", "E"
+            R.drawable.baseline_add_shopping_cart_24, "Мои Покупки", "Expenses"
         ),
         DrawerItems(
-            R.drawable.baseline_edit_note_24, "Мои Списания", "F"
+            R.drawable.baseline_edit_note_24, "Мои Списания", "WriteOff"
         )
     )
 

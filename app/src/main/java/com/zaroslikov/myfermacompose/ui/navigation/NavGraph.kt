@@ -42,21 +42,20 @@ fun Nav(navController: NavHostController, scope: CoroutineScope, drawerState: Dr
         composable(route = "Sale") {
             SaleProduct(scope = scope, drawerState = drawerState)
         }
-//
-//        composable(route = "D") {
-//            Expenses(modifier = modifier)
-//        }
+
+        composable(route = "Expenses") {
+            Expenses(scope = scope, drawerState = drawerState)
+        }
+
+        composable(route = "WriteOff") {
+            WriteOffProduct(scope = scope, drawerState = drawerState)
+        }
+
 //
 //        composable(route = "E") {
 //            Finance(modifier = modifier)
 //        }
 //
-//        composable(route = "F") {
-//            WriteOffProduct(modifier = modifier)
-//        }
-//
-//        composable(route = "G") {
-//            IncubatorStart(modifier = modifier)
-//        }
+
     }
 }

@@ -69,7 +69,7 @@ fun AddProduct(scope: CoroutineScope, drawerState: DrawerState) {
 
     Scaffold(
         topBar = {
-            TopAppBar(title = "Добавления", scope = scope, drawerState = drawerState)
+            TopAppBar(title = "Мои Товары", scope = scope, drawerState = drawerState)
         },
         floatingActionButton = {
             ExtendedFloatingActionButton(
@@ -89,9 +89,9 @@ fun AddProduct(scope: CoroutineScope, drawerState: DrawerState) {
 @Composable
 fun AddProductContainer(modifier: Modifier, showBottom: MutableState<Boolean>) {
 
-    LazyVerticalGrid(columns = GridCells.Fixed(1)) {
+    LazyVerticalGrid(columns = GridCells.Fixed(1), modifier = modifier) {
         items(30) {
-           AddProductCard()
+            AddProductCard()
         }
     }
 
@@ -121,7 +121,7 @@ fun AddProductSheet(
                 label = { Text("Товар") },
                 modifier = Modifier.fillMaxWidth(),
                 supportingText = {
-                    Text("Выберите товар")
+                    Text("Введите или выберите товар")
                 }
             )
 
@@ -187,7 +187,7 @@ fun AddProductCard() {
                 )
 
                 Text(
-                    text = "Дата добавления: 02.05.2024",
+                    text = "Дата: 02.05.2024",
                     textAlign = TextAlign.Center,
                     modifier = Modifier
                         .wrapContentSize()

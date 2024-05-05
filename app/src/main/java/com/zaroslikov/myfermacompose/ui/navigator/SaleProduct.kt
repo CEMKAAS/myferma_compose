@@ -49,14 +49,13 @@ fun SaleProduct(scope: CoroutineScope, drawerState: DrawerState) {
     val showBottomSheet = remember { mutableStateOf(false) }
     Scaffold(
         topBar = {
-            TopAppBar(title = "Добавления", scope = scope, drawerState = drawerState)
-
+            TopAppBar(title = "Мои Продажи", scope = scope, drawerState = drawerState)
         },
         floatingActionButton = {
             ExtendedFloatingActionButton(
-                onClick = { /* do something */ },
-                icon = { Icon(Icons.Filled.Add, "Localized description") },
-                text = { Text(text = "Добавить") },
+                onClick = { showBottomSheet.value = true },
+                icon = { Icon(Icons.Filled.Add, "Продать") },
+                text = { Text(text = "Продать") },
             )
         }
     ) { innerPadding ->
@@ -66,62 +65,13 @@ fun SaleProduct(scope: CoroutineScope, drawerState: DrawerState) {
         )
     }
 }
-//
-//@Composable
-//fun SaleProductContainer() {
-//    Card(
-//        modifier = Modifier
-//            .padding(8.dp)
-//            .clickable {
-////                navController.navigate("MyFerma")
-//            },
-//        elevation = CardDefaults.cardElevation(10.dp),
-//        colors = CardDefaults.cardColors()
-//    ) {
-//        //clikable
-//
-//        Row(
-//            modifier = Modifier
-//                .fillMaxWidth()
-//                .wrapContentHeight(),
-//            horizontalArrangement = Arrangement.SpaceBetween,
-//            verticalAlignment = Alignment.CenterVertically
-//        ) {
-//
-//            Column {
-//                Text(
-//                    text = "Яйца",
-//                    modifier = Modifier
-//                        .fillMaxWidth(0.16f)
-//                        .padding(6.dp)
-//                )
-//
-//                Text(
-//                    text = "Дата добавления: 02.05.2024",
-//                    textAlign = TextAlign.Center,
-//                    modifier = Modifier
-//                        .wrapContentSize()
-//                        .padding(6.dp)
-//                )
-//            }
-//
-//            Text(
-//                text = "30",
-//                textAlign = TextAlign.Center,
-//                modifier = Modifier
-//                    .fillMaxWidth(0.3f)
-//                    .padding(6.dp)
-//            )
-//        }
-//    }
-//}
 
 @Composable
 fun SaleProductContainer(modifier: Modifier, showBottom: MutableState<Boolean>) {
 
-    LazyVerticalGrid(columns = GridCells.Fixed(1)) {
+    LazyVerticalGrid(columns = GridCells.Fixed(1), modifier = modifier) {
         items(30) {
-            AddProductCard()
+            SaleProductCard()
         }
     }
 
@@ -133,81 +83,71 @@ fun SaleProductContainer(modifier: Modifier, showBottom: MutableState<Boolean>) 
 
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SaleProductSheet(showBottom: MutableState<Boolean>) {
     val checkedState = remember { mutableStateOf(false) }
     var text by rememberSaveable { mutableStateOf("") }
-    Column(modifier = Modifier.padding(5.dp, 5.dp)) {
-        Text(text = "Cейчас на складе: ${"Яйца - 50 шт."}", fontSize = 20.sp)
-        Text(text = "Цена за 1 шт. товара : ${"Яйца 0.0 ₽"}", fontSize = 20.sp)
 
-        OutlinedTextField(
-            value = text,
-            onValueChange = { text = it },
-            label = { Text("Товар") },
-            modifier = Modifier.fillMaxWidth(),
-            supportingText = {
-                Text("Выберите товар")
-            }
-        )
+    //TODO щит выдвигается полностью
+    ModalBottomSheet(onDismissRequest = { showBottom.value = false }) {
+        Column(modifier = Modifier.padding(5.dp, 5.dp)) {
+            Text(text = "Cейчас на складе: ${"Яйца - 50 шт."}", fontSize = 20.sp)
+            Text(text = "Цена за 1 шт. товара : ${"Яйца 0.0 ₽"}", fontSize = 20.sp)
 
-        OutlinedTextField(
-            value = text,
-            onValueChange = { text = it },
-            label = { Text("Количество") },
-            modifier = Modifier.fillMaxWidth(),
-            supportingText = {
-                Text("Укажите кол-во товара, которое хотите сохранить на склад")
-            },
-            suffix = { Text(text = "₽") },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-//            isError = () TODO
-        )
-
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 10.dp),
-            horizontalArrangement = Arrangement.Start,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Checkbox(
-                checked = checkedState.value,
-                onCheckedChange = { checkedState.value = it }
+            OutlinedTextField(
+                value = text,
+                onValueChange = { text = it },
+                label = { Text("Товар") },
+                modifier = Modifier.fillMaxWidth(),
+                supportingText = {
+                    Text("Введите или выберите товар")
+                }
             )
-            Text(text = "Указать свою цену")
-        }
 
-        OutlinedTextField(
-            value = text,
-            onValueChange = { text = it },
-            label = { Text("Цена") },
-            modifier = Modifier.fillMaxWidth(),
-            supportingText = {
-                Text("Укажите цену за весь товар")
-            },
-            suffix = { Text(text = "₽") },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            OutlinedTextField(
+                value = text,
+                onValueChange = { text = it },
+                label = { Text("Количество") },
+                modifier = Modifier.fillMaxWidth(),
+                supportingText = {
+                    Text("Укажите кол-во товара, которое Вы продали")
+                },
+                suffix = { Text(text = "₽") },
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
 //            isError = () TODO
-        )
+            )
 
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 10.dp),
-            horizontalArrangement = Arrangement.SpaceEvenly
-        ) {
-            Button(onClick = { /*TODO*/ }) {
-                Text(text = "График")
-                //TODO Изображение
-            }
-            Button(onClick = { /*TODO*/ }) {
-                Text(text = "Продать")
-                //TODO Изображение
+            OutlinedTextField(
+                value = text,
+                onValueChange = { text = it },
+                label = { Text("Цена") },
+                modifier = Modifier.fillMaxWidth(),
+                supportingText = {
+                    Text("Укажите цену за весь товар")
+                },
+                suffix = { Text(text = "₽") },
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+//            isError = () TODO
+            )
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 10.dp),
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
+                Button(onClick = { /*TODO*/ }) {
+                    Text(text = "График")
+                    //TODO Изображение
+                }
+                Button(onClick = { /*TODO*/ }) {
+                    Text(text = "Продать")
+                    //TODO Изображение
+                }
             }
         }
     }
-
 }
 
 @Composable
@@ -240,7 +180,7 @@ fun SaleProductCard() {
                 )
 
                 Text(
-                    text = "Дата добавления: 02.05.2024",
+                    text = "Дата: 02.05.2024",
                     textAlign = TextAlign.Center,
                     modifier = Modifier
                         .wrapContentSize()
@@ -251,10 +191,16 @@ fun SaleProductCard() {
             Text(
                 text = "30",
                 textAlign = TextAlign.Center,
-                modifier = Modifier
-                    .fillMaxWidth(0.3f)
-                    .padding(6.dp)
             )
+
+            Text(
+                text = "30 ₽",
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .padding(6.dp)
+                    .padding(end = 10.dp)
+            )
+
         }
     }
 }
