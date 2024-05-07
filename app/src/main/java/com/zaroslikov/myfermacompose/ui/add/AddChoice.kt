@@ -51,6 +51,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.zaroslikov.myfermacompose.R
 import com.zaroslikov.myfermacompose.ui.CardFerma
 import com.zaroslikov.myfermacompose.ui.DrawerItems
@@ -59,86 +61,75 @@ import kotlinx.coroutines.CoroutineScope
 
 
 @Composable
-fun ChooiseProject(scope: CoroutineScope, drawerState: DrawerState) {
+fun ChooiseProject(scope: CoroutineScope, drawerState: DrawerState, navController: NavController) {
 
     Scaffold(
         topBar = {
             TopAppBar(title = "Мое Хозяйство", scope = scope, drawerState = drawerState)
         }) { innerPadding ->
-        ChooiseProjectContainer(modifier = Modifier.padding(innerPadding))
+        ChooiseProjectContainer(modifier = Modifier.padding(innerPadding), navController)
     }
 }
 
 
 @Composable
-fun ChooiseProjectContainer(modifier: Modifier) {
+fun ChooiseProjectContainer(modifier: Modifier, navController: NavController) {
 
     val drawerItems = listOf(
-
         DrawerItems(
-            R.drawable.baseline_arrow_back_24, "Вернуться к проектам", "Start"
+            R.drawable.chicken, "Инкубатор", "AddIncubator"
         ),
         DrawerItems(
-            R.drawable.baseline_warehouse_24, "Мой Склад", "MyFerma"
+            R.drawable.baseline_warehouse_24, "Хозяйство", "AddProject"
         ),
-        DrawerItems(
-            R.drawable.baseline_currency_ruble_24, "Мой Финансы", "Finance"
-        ),
-        DrawerItems(
-            R.drawable.baseline_add_circle_outline_24, "Мои Товары", "Add"
-        ),
-        DrawerItems(
-            R.drawable.baseline_add_card_24, "Мои Продажи", "Sale"
-        ),
-        DrawerItems(
-            R.drawable.baseline_add_shopping_cart_24, "Мои Покупки", "Expenses"
-        ),
-        DrawerItems(
-            R.drawable.baseline_edit_note_24, "Мои Списания", "WriteOff"
-        )
     )
 
-    Column ( modifier = modifier,
+    Column(
+        modifier = modifier,
         verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally){
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
         Text(text = "Выберите проект!")
 
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
             contentPadding = PaddingValues(8.dp), verticalArrangement = Arrangement.Center
         ) {
-            items(2) {
-                AddIncubatorCard()
+            items(drawerItems.size) {
+                AddIncubatorCard(
+                    drawerItems[it].text,
+                    drawerItems[it].icon,
+                    drawerItems[it].route,
+                    navController
+                )
             }
         }
     }
-
 }
 
 @Composable
-fun AddIncubatorCard() {
+fun AddIncubatorCard(title: String, image: Int, route: String, navController: NavController) {
     Card(
         modifier = Modifier
             .padding(8.dp)
             .clickable {
-//                navController.navigate("MyFerma")
+                navController.navigate(route)
             },
         elevation = CardDefaults.cardElevation(10.dp),
         colors = CardDefaults.cardColors(),
-        ) {
+    ) {
         Column(
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Image(
-                painter = painterResource(id = R.drawable.chicken),
+                painter = painterResource(id = image),
                 contentDescription = null,
                 contentScale = ContentScale.Fit,
-
-            )
+                )
             Text(
-                text = "Инкубатор",
+                text = title,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier
@@ -150,22 +141,16 @@ fun AddIncubatorCard() {
 }
 
 
-@Preview(showBackground = true)
-@Composable
-fun AddIncubatorCardPrewie() {
-    AddIncubatorCard()
-}
-
 //@Preview(showBackground = true)
 //@Composable
-//fun AddProjectCardPrewie() {
-//    AddProjectCard()
+//fun AddIncubatorCardPrewie() {
+//    AddIncubatorCard()
 //}
 
 @Preview(showBackground = true)
 @Composable
 fun ChooiseProjectPrewie() {
-    ChooiseProjectContainer(modifier = Modifier.fillMaxSize())
+    ChooiseProjectContainer(modifier = Modifier.fillMaxSize(), navController = rememberNavController())
 }
 
 //@Preview(showBackground = true)

@@ -14,6 +14,8 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
+import androidx.compose.material3.DrawerState
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -26,9 +28,25 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+import com.zaroslikov.myfermacompose.ui.TopAppBar
+import kotlinx.coroutines.CoroutineScope
+
 
 @Composable
-fun AddIncubatorTwo(modifier: Modifier) {
+fun AddIncubatorTwo(scope: CoroutineScope, drawerState: DrawerState, navController: NavController) {
+    Scaffold(
+        topBar = {
+            TopAppBar(title = "Мое Хозяйство", scope = scope, drawerState = drawerState)
+        },
+    ) { innerPadding ->
+        AddIncubatorTwoContainer(modifier = Modifier.padding(innerPadding), navController)
+    }
+}
+
+@Composable
+fun AddIncubatorTwoContainer(modifier: Modifier, navController: NavController) {
 
     Column(modifier, horizontalAlignment = Alignment.CenterHorizontally) {
         Row(
@@ -106,9 +124,9 @@ fun AddIncubatorTwo(modifier: Modifier) {
         }
         Divider(color = Color.DarkGray, thickness = 1.dp)
 
-        Button(onClick = { /*TODO*/ }, modifier = Modifier.padding(vertical = 5.dp)) {
+        Button(onClick = { navController.navigate("Start") }, modifier = Modifier.padding(vertical = 5.dp)) {
             Text(text = "Запустить")
-            
+
         }
     }
 
@@ -195,5 +213,8 @@ fun MyRowIncubatorAdd() {
 @Preview(showBackground = true)
 @Composable
 fun AddIncubatorTwoPrewie() {
-    AddIncubatorTwo(modifier = Modifier.fillMaxSize())
+    AddIncubatorTwoContainer(
+        modifier = Modifier.fillMaxSize(),
+        navController = rememberNavController()
+    )
 }

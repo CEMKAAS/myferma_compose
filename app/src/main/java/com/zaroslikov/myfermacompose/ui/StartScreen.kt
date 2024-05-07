@@ -63,7 +63,7 @@ fun StartScreen(scope: CoroutineScope, drawerState: DrawerState, navController: 
             TopAppBar(title = "Мое Хозяйство", scope = scope, drawerState = drawerState)
         }, floatingActionButton = {
             ExtendedFloatingActionButton(
-                onClick = { /* do something */ },
+                onClick = { navController.navigate("ChooiseProject") },
                 icon = { Icon(Icons.Filled.Add, "Localized description") },
                 text = { Text(text = "Добавить") },
             )

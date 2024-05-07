@@ -9,6 +9,10 @@ import androidx.navigation.compose.composable
 import com.zaroslikov.myfermacompose.ui.Incubator.IncubatorStart
 import com.zaroslikov.myfermacompose.ui.Incubator.NowIncubator
 import com.zaroslikov.myfermacompose.ui.StartScreen
+import com.zaroslikov.myfermacompose.ui.add.AddIncubator
+import com.zaroslikov.myfermacompose.ui.add.AddIncubatorTwo
+import com.zaroslikov.myfermacompose.ui.add.AddProject
+import com.zaroslikov.myfermacompose.ui.add.ChooiseProject
 import com.zaroslikov.myfermacompose.ui.navigator.AddProduct
 import com.zaroslikov.myfermacompose.ui.navigator.Container
 import com.zaroslikov.myfermacompose.ui.navigator.ContainerApp
@@ -51,11 +55,20 @@ fun Nav(navController: NavHostController, scope: CoroutineScope, drawerState: Dr
             WriteOffProduct(scope = scope, drawerState = drawerState)
         }
 
-//
-//        composable(route = "E") {
-//            Finance(modifier = modifier)
-//        }
-//
+        composable(route = "ChooiseProject") {
+            ChooiseProject(scope = scope, drawerState = drawerState, navController = navController)
+        }
+
+        composable(route = "AddIncubator") {
+            AddIncubator(scope = scope, drawerState = drawerState, navController = navController)
+        }
+
+        composable(route = "AddIncubatorTwo") {
+            AddIncubatorTwo(scope = scope, drawerState = drawerState, navController = navController)
+        }
+        composable(route = "AddProject") {
+            AddProject(scope = scope, drawerState = drawerState, navController = navController)
+        }
 
     }
 }
