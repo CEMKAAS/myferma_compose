@@ -25,6 +25,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
@@ -42,53 +43,83 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.zaroslikov.myfermacompose.R
+import com.zaroslikov.myfermacompose.ui.DrawerSheet
+import com.zaroslikov.myfermacompose.ui.FilterProductSheet
 import com.zaroslikov.myfermacompose.ui.TopAppBar
+import com.zaroslikov.myfermacompose.ui.TopAppBarFerma
 import kotlinx.coroutines.CoroutineScope
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun WriteOffProduct(scope: CoroutineScope, drawerState: DrawerState) {
+fun WriteOffProduct(scope: CoroutineScope, drawerState: DrawerState, navController: NavController) {
 
 //запоминает состояние для BottomSheet
     val sheetState = rememberModalBottomSheetState()
     val showBottomSheet = remember { mutableStateOf(false) }
-
-    Scaffold(
-        topBar = {
-            TopAppBar(title = "Мои Списания", scope = scope, drawerState = drawerState)
+    val showBottomSheetFilter = remember { mutableStateOf(false) }
+    ModalNavigationDrawer(
+        drawerState = drawerState,
+        drawerContent = {
+            DrawerSheet(scope = scope, navController = navController, drawerState = drawerState)
         },
-        floatingActionButton = {
-            ExtendedFloatingActionButton(
-                onClick = {
-                    showBottomSheet.value = true
-                },
-                icon = { Icon(Icons.Filled.Add, "Списать") },
-                text = { Text(text = "Списать") },
+    ) {
+        Scaffold(
+            topBar = {
+                TopAppBarFerma(
+                    title = "Мои Списания",
+                    scope = scope,
+                    drawerState = drawerState,
+                    showBottomFilter = showBottomSheetFilter,
+                    filterSheet = true
+                )
+            },
+            floatingActionButton = {
+                ExtendedFloatingActionButton(
+                    onClick = {
+                        showBottomSheet.value = true
+                    },
+                    icon = { Icon(Icons.Filled.Add, "Списать") },
+                    text = { Text(text = "Списать") },
+                )
+            }
+        ) { innerPadding ->
+            WriteOffProductContainer(
+                modifier = Modifier.padding(innerPadding),
+                showBottom = showBottomSheet,
+                showBottomFilter = showBottomSheetFilter,
+                navController = navController
             )
         }
-    ) { innerPadding ->
-        WriteOffProductContainer(
-            modifier = Modifier.padding(innerPadding),
-            showBottom = showBottomSheet
-        )
     }
 }
 
-
 @Composable
-fun WriteOffProductContainer(modifier: Modifier, showBottom: MutableState<Boolean>) {
+fun WriteOffProductContainer(
+    modifier: Modifier, showBottom: MutableState<Boolean>,
+    showBottomFilter: MutableState<Boolean>,
+    navController: NavController
+) {
 
     LazyVerticalGrid(columns = GridCells.Fixed(1), modifier = modifier) {
         items(30) {
-            WriteOffProductCard()
+            WriteOffProductCard(navController = navController)
         }
+    }
+
+    if (showBottomFilter.value) {
+        FilterProductSheet(
+            showBottom = showBottomFilter
+        )
     }
 
     if (showBottom.value) {
@@ -101,12 +132,12 @@ fun WriteOffProductContainer(modifier: Modifier, showBottom: MutableState<Boolea
 
 
 @Composable
-fun WriteOffProductCard() {
+fun WriteOffProductCard(navController: NavController) {
     Card(
         modifier = Modifier
             .padding(8.dp)
             .clickable {
-//                navController.navigate("MyFerma")
+                navController.navigate("OneEditWriteOff")
             },
         elevation = CardDefaults.cardElevation(10.dp),
         colors = CardDefaults.cardColors()
@@ -134,8 +165,9 @@ fun WriteOffProductCard() {
                         Text(
                             text = "Яйца",
                             modifier = Modifier
-                                .fillMaxWidth(0.16f)
-                                .padding(6.dp)
+                                .wrapContentSize()
+                                .padding(6.dp),
+                            fontWeight = FontWeight.SemiBold,
                         )
 
                         Text(
@@ -151,9 +183,10 @@ fun WriteOffProductCard() {
             Text(
                 text = "30",
                 textAlign = TextAlign.Center,
-                modifier = Modifier.padding(end = 10.dp)
+                modifier = Modifier.padding(end = 10.dp),
+                fontWeight = FontWeight.Black,
+                fontSize = 18.sp
             )
-
         }
     }
 }
@@ -219,12 +252,8 @@ fun WriteOffProductSheet(showBottom: MutableState<Boolean>) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 10.dp),
-                horizontalArrangement = Arrangement.SpaceEvenly
+                horizontalArrangement = Arrangement.Center
             ) {
-                Button(onClick = { /*TODO*/ }) {
-                    Text(text = "График")
-                    //TODO Изображение
-                }
                 Button(onClick = { /*TODO*/ }) {
                     Text(text = "Продать")
                     //TODO Изображение
@@ -244,5 +273,5 @@ fun WriteOffProductSheet(showBottom: MutableState<Boolean>) {
 @Preview(showBackground = true)
 @Composable
 fun WriteOffProductPrewie() {
-    WriteOffProductCard()
+    WriteOffProductCard(navController = rememberNavController())
 }

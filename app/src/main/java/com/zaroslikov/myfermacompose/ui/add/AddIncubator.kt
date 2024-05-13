@@ -34,15 +34,16 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.zaroslikov.myfermacompose.ui.TopAppBar
+import com.zaroslikov.myfermacompose.ui.TopAppBarStart
 import com.zaroslikov.myfermacompose.ui.navigator.AddProductContainer
 import kotlinx.coroutines.CoroutineScope
 
 
 @Composable
-fun AddIncubator(scope: CoroutineScope, drawerState: DrawerState, navController: NavController) {
+fun AddIncubator(navController: NavController, navigateBack: () -> Unit) {
     Scaffold(
         topBar = {
-            TopAppBar(title = "Мое Хозяйство", scope = scope, drawerState = drawerState)
+            TopAppBarStart(title = "Мое Хозяйство", true, navigateUp = navigateBack )
         },
     ) { innerPadding ->
         AddIncubatorContainer(modifier = Modifier.padding(innerPadding), navController)
@@ -54,6 +55,7 @@ fun AddIncubatorContainer(modifier: Modifier, navController: NavController) {
     var text by rememberSaveable { mutableStateOf("") }
     val checkedStateAiring = remember { mutableStateOf(false) }
     val checkedStateOver = remember { mutableStateOf(false) }
+    //TODO Прокрутка
     Column(modifier = modifier.padding(5.dp, 5.dp)) {
 
         OutlinedTextField(

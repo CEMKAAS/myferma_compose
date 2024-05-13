@@ -24,6 +24,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -37,54 +38,83 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
+import com.zaroslikov.myfermacompose.ui.DrawerSheet
+import com.zaroslikov.myfermacompose.ui.FilterProductSheet
 import com.zaroslikov.myfermacompose.ui.TopAppBar
+import com.zaroslikov.myfermacompose.ui.TopAppBarFerma
 import kotlinx.coroutines.CoroutineScope
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Expenses(scope: CoroutineScope, drawerState: DrawerState) {
+fun Expenses(scope: CoroutineScope, drawerState: DrawerState, navController:NavController) {
 
 //запоминает состояние для BottomSheet
     val sheetState = rememberModalBottomSheetState()
     val showBottomSheet = remember { mutableStateOf(false) }
-
-    Scaffold(
-        topBar = {
-            TopAppBar(title = "Мои Покупки", scope = scope, drawerState = drawerState)
+    val showBottomSheetFilter = remember { mutableStateOf(false) }
+    ModalNavigationDrawer(
+        drawerState = drawerState,
+        drawerContent = {
+            DrawerSheet(scope = scope, navController = navController, drawerState = drawerState)
         },
-        floatingActionButton = {
-            ExtendedFloatingActionButton(
-                onClick = {
-                    showBottomSheet.value = true
-                },
-                icon = { Icon(Icons.Filled.Add, "Купить") },
-                text = { Text(text = "Купить") },
+    ) {
+        Scaffold(
+            topBar = {
+                TopAppBarFerma(
+                    title = "Мои Покупки",
+                    scope = scope,
+                    drawerState = drawerState,
+                    showBottomFilter = showBottomSheetFilter,
+                    filterSheet = true
+                )
+            },
+            floatingActionButton = {
+                ExtendedFloatingActionButton(
+                    onClick = {
+                        showBottomSheet.value = true
+                    },
+                    icon = { Icon(Icons.Filled.Add, "Купить") },
+                    text = { Text(text = "Купить") },
+                )
+            }
+        ) { innerPadding ->
+            ExpensesContainer(
+                modifier = Modifier.padding(innerPadding),
+                showBottom = showBottomSheet,
+                showBottomFilter = showBottomSheetFilter,
+                navController = navController
             )
         }
-    ) { innerPadding ->
-        ExpensesContainer(modifier = Modifier.padding(innerPadding), showBottom = showBottomSheet)
     }
 }
-
 
 @Composable
 fun ExpensesContainer(
     modifier: Modifier,
-    showBottom: MutableState<Boolean>
+    showBottom: MutableState<Boolean>,
+    showBottomFilter: MutableState<Boolean>,
+    navController: NavController,
 ) {
 
     LazyVerticalGrid(columns = GridCells.Fixed(1), modifier = modifier) {
         items(30) {
-            ExpensesCard()
+            ExpensesCard(navController = navController)
         }
     }
-
+    if (showBottomFilter.value) {
+        FilterProductSheet(
+            showBottom = showBottomFilter
+        )
+    }
     if (showBottom.value) {
         ExpensesSheet(
             showBottom = showBottom
@@ -94,12 +124,12 @@ fun ExpensesContainer(
 }
 
 @Composable
-fun ExpensesCard() {
+fun ExpensesCard(navController: NavController) {
     Card(
         modifier = Modifier
             .padding(8.dp)
             .clickable {
-//                navController.navigate("MyFerma")
+                navController.navigate("OneEditExpenses")
             },
         elevation = CardDefaults.cardElevation(10.dp),
         colors = CardDefaults.cardColors()
@@ -119,7 +149,8 @@ fun ExpensesCard() {
                     text = "Комбикорм",
                     modifier = Modifier
                         .wrapContentSize()
-                        .padding(6.dp)
+                        .padding(6.dp),
+                    fontWeight = FontWeight.SemiBold,
                 )
 
                 Text(
@@ -135,7 +166,8 @@ fun ExpensesCard() {
                 Text(
                     text = "30",
                     textAlign = TextAlign.Center,
-                    modifier = Modifier.padding(start = 20.dp)
+                    fontWeight = FontWeight.Black,
+                    fontSize = 18.sp
                 )
 
                 Text(
@@ -143,7 +175,9 @@ fun ExpensesCard() {
                     textAlign = TextAlign.Center,
                     modifier = Modifier
                         .padding(6.dp)
-                        .padding(end = 10.dp)
+                        .padding(end = 10.dp),
+                    fontWeight = FontWeight.Black,
+                    fontSize = 18.sp
                 )
         }
     }
@@ -197,12 +231,8 @@ fun ExpensesSheet(showBottom: MutableState<Boolean>) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 10.dp),
-                horizontalArrangement = Arrangement.SpaceEvenly
+                horizontalArrangement = Arrangement.Center
             ) {
-                Button(onClick = { /*TODO*/ }) {
-                    Text(text = "График")
-                    //TODO Изображение
-                }
                 Button(onClick = { /*TODO*/ }) {
                     Text(text = "Добавить")
                     //TODO Изображение
@@ -212,8 +242,8 @@ fun ExpensesSheet(showBottom: MutableState<Boolean>) {
     }
 }
 
-//@Preview(showBackground = true)
-//@Composable
-//fun ExpensesPrewie() {
-//    Expenses(modifier = Modifier.fillMaxSize())
-//}
+@Preview(showBackground = true)
+@Composable
+fun ExpensesPrewie() {
+    ExpensesCard(navController = rememberNavController())
+}

@@ -1,9 +1,11 @@
 package com.zaroslikov.myfermacompose.ui.navigator
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
@@ -21,6 +23,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -34,49 +37,83 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import com.zaroslikov.myfermacompose.R
+import com.zaroslikov.myfermacompose.ui.DrawerSheet
+import com.zaroslikov.myfermacompose.ui.FilterProductSheet
 import com.zaroslikov.myfermacompose.ui.TopAppBar
+import com.zaroslikov.myfermacompose.ui.TopAppBarFerma
 import kotlinx.coroutines.CoroutineScope
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddProduct(scope: CoroutineScope, drawerState: DrawerState) {
+fun AddProduct(scope: CoroutineScope, drawerState: DrawerState, navController: NavController) {
 
 //запоминает состояние для BottomSheet
     val sheetState = rememberModalBottomSheetState()
     val showBottomSheet = remember { mutableStateOf(false) }
-
-    Scaffold(
-        topBar = {
-            TopAppBar(title = "Мои Товары", scope = scope, drawerState = drawerState)
+    val showBottomSheetFilter = remember { mutableStateOf(false) }
+    ModalNavigationDrawer(
+        drawerState = drawerState,
+        drawerContent = {
+            DrawerSheet(scope = scope, navController = navController, drawerState = drawerState)
         },
-        floatingActionButton = {
-            ExtendedFloatingActionButton(
-                onClick = {
-                    showBottomSheet.value = true
-                },
-                icon = { Icon(Icons.Filled.Add, "Localized description") },
-                text = { Text(text = "Добавить") },
+    ) {
+        Scaffold(
+            topBar = {
+                TopAppBarFerma(
+                    title = "Мои Товары",
+                    scope = scope,
+                    drawerState = drawerState,
+                    showBottomFilter = showBottomSheetFilter,
+                    filterSheet = true
+                )
+            },
+            floatingActionButton = {
+                ExtendedFloatingActionButton(
+                    onClick = {
+                        showBottomSheet.value = true
+                    },
+                    icon = { Icon(Icons.Filled.Add, "Добавить") },
+                    text = { Text(text = "Добавить") },
+                )
+            }
+        ) { innerPadding ->
+            AddProductContainer(
+                modifier = Modifier.padding(innerPadding),
+                showBottom = showBottomSheet,
+                showBottomFilter = showBottomSheetFilter,
+                navController = navController
             )
         }
-    ) { innerPadding ->
-        AddProductContainer(modifier = Modifier.padding(innerPadding), showBottom = showBottomSheet)
     }
 }
 
-
 @Composable
-fun AddProductContainer(modifier: Modifier, showBottom: MutableState<Boolean>) {
+fun AddProductContainer(
+    modifier: Modifier,
+    showBottom: MutableState<Boolean>,
+    showBottomFilter: MutableState<Boolean>,
+    navController: NavController
+) {
 
     LazyVerticalGrid(columns = GridCells.Fixed(1), modifier = modifier) {
         items(30) {
-            AddProductCard()
+            AddProductCard(navController = navController)
         }
+    }
+    if (showBottomFilter.value) {
+        FilterProductSheet(
+            showBottom = showBottomFilter
+        )
     }
 
     if (showBottom.value) {
@@ -125,12 +162,8 @@ fun AddProductSheet(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 10.dp),
-                horizontalArrangement = Arrangement.SpaceEvenly
+                horizontalArrangement = Arrangement.Center
             ) {
-                Button(onClick = { /*TODO*/ }) {
-                    Text(text = "График")
-                    //TODO Изображение
-                }
                 Button(onClick = { /*TODO*/ }) {
                     Text(text = "Добавить")
                     //TODO Изображение
@@ -142,18 +175,16 @@ fun AddProductSheet(
 
 
 @Composable
-fun AddProductCard() {
+fun AddProductCard(navController: NavController) {
     Card(
         modifier = Modifier
             .padding(8.dp)
             .clickable {
-//                navController.navigate("MyFerma")
+                navController.navigate("OneEditAdd")
             },
         elevation = CardDefaults.cardElevation(10.dp),
         colors = CardDefaults.cardColors()
     ) {
-        //clikable
-
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -167,8 +198,9 @@ fun AddProductCard() {
                     text = "Яйца",
                     modifier = Modifier
                         .fillMaxWidth(0.16f)
-                        .padding(6.dp)
-                )
+                        .padding(6.dp),
+                    fontWeight = FontWeight.SemiBold,
+                    )
 
                 Text(
                     text = "Дата: 02.05.2024",
@@ -180,32 +212,36 @@ fun AddProductCard() {
             }
 
             Text(
-                text = "30",
+                text = "30 шт.",
                 textAlign = TextAlign.Center,
                 modifier = Modifier
                     .fillMaxWidth(0.3f)
-                    .padding(6.dp)
+                    .padding(6.dp),
+                fontWeight = FontWeight.Black,
+                fontSize = 18.sp
             )
         }
     }
 }
 
 
-@Preview(showBackground = true)
-@Composable
-fun AddProductCardPrewie() {
-    AddProductCard()
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun AddProductCardPrewie() {
+//    AddProductCard()
+//}
 
 
 //@Preview(showBackground = true)
 //@Composable
 //fun AddProductPrewie() {
-//    AddProductContainer(modifier = Modifier.fillMaxSize())
+//    AddProductContainer(
+//        modifier = Modifier.fillMaxSize(),
+//        showBottom = remember { mutableStateOf(false) })
 //}
 
-//@Preview(showBackground = true)
-//@Composable
-//fun AddProductSheetPrewie() {
-//    AddProductSheet(showBottom = remember { mutableStateOf(false) })
-//}
+@Preview(showBackground = true)
+@Composable
+fun AddProductSheetPrewie() {
+    AddProductSheet(showBottom = remember { mutableStateOf(true) })
+}

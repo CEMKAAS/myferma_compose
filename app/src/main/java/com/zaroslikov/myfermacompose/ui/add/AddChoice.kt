@@ -1,8 +1,10 @@
 package com.zaroslikov.myfermacompose.ui.add
 
+import android.graphics.Paint.Align
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
@@ -57,17 +59,23 @@ import com.zaroslikov.myfermacompose.R
 import com.zaroslikov.myfermacompose.ui.CardFerma
 import com.zaroslikov.myfermacompose.ui.DrawerItems
 import com.zaroslikov.myfermacompose.ui.TopAppBar
+import com.zaroslikov.myfermacompose.ui.TopAppBarStart
 import kotlinx.coroutines.CoroutineScope
 
 
 @Composable
-fun ChooiseProject(scope: CoroutineScope, drawerState: DrawerState, navController: NavController) {
+fun ChooiseProject(navController: NavController, navigateBack: () -> Unit) {
 
     Scaffold(
         topBar = {
-            TopAppBar(title = "Мое Хозяйство", scope = scope, drawerState = drawerState)
+            TopAppBarStart(title = "Мое Хозяйство", true, navigateUp = navigateBack)
         }) { innerPadding ->
-        ChooiseProjectContainer(modifier = Modifier.padding(innerPadding), navController)
+        ChooiseProjectContainer(
+            modifier = Modifier
+                .padding(innerPadding)
+                .fillMaxHeight(),
+            navController
+        )
     }
 }
 
@@ -89,11 +97,16 @@ fun ChooiseProjectContainer(modifier: Modifier, navController: NavController) {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(text = "Выберите проект!")
+        Text(
+            text = " Выберите интересующий Вас проект",
+            fontSize = 24.sp,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.padding(8.dp)
+        )
 
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
-            contentPadding = PaddingValues(8.dp), verticalArrangement = Arrangement.Center
+            contentPadding = PaddingValues(8.dp), verticalArrangement = Arrangement.Center,
         ) {
             items(drawerItems.size) {
                 AddIncubatorCard(
@@ -118,19 +131,25 @@ fun AddIncubatorCard(title: String, image: Int, route: String, navController: Na
         elevation = CardDefaults.cardElevation(10.dp),
         colors = CardDefaults.cardColors(),
     ) {
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
+        Box(
+            modifier = Modifier.height(200.dp)
         ) {
             Image(
                 painter = painterResource(id = image),
                 contentDescription = null,
                 contentScale = ContentScale.Fit,
-                )
+                modifier = Modifier.fillMaxSize()
+            )
+        }
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+
             Text(
                 text = title,
-                fontSize = 16.sp,
+                fontSize = 20.sp,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier
                     .padding(vertical = 5.dp, horizontal = 5.dp)
@@ -150,11 +169,14 @@ fun AddIncubatorCard(title: String, image: Int, route: String, navController: Na
 @Preview(showBackground = true)
 @Composable
 fun ChooiseProjectPrewie() {
-    ChooiseProjectContainer(modifier = Modifier.fillMaxSize(), navController = rememberNavController())
+    ChooiseProjectContainer(
+        modifier = Modifier.fillMaxSize(),
+        navController = rememberNavController()
+    )
 }
 
-//@Preview(showBackground = true)
-//@Composable
-//fun AddProductSheetPrewie() {
-//    AddProductSheet(showBottom = remember { mutableStateOf(false) })
-//}
+@Preview(showBackground = true)
+@Composable
+fun ChooiPrewie() {
+    ChooiseProject(navController = rememberNavController(), navigateBack = {})
+}

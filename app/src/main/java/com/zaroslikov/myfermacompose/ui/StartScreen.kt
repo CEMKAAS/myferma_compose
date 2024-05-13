@@ -57,10 +57,10 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @Composable
-fun StartScreen(scope: CoroutineScope, drawerState: DrawerState, navController: NavController) {
+fun StartScreen(navController: NavController) {
     Scaffold(
         topBar = {
-            TopAppBar(title = "Мое Хозяйство", scope = scope, drawerState = drawerState)
+            TopAppBarStart(title = "Мое Хозяйство", canNavigateBack = false)
         }, floatingActionButton = {
             ExtendedFloatingActionButton(
                 onClick = { navController.navigate("ChooiseProject") },
@@ -72,7 +72,6 @@ fun StartScreen(scope: CoroutineScope, drawerState: DrawerState, navController: 
         StartScreenContainer(
             modifier = Modifier.padding(innerPadding),
             navController = navController,
-            scope = scope
         )
     }
 }
@@ -80,7 +79,7 @@ fun StartScreen(scope: CoroutineScope, drawerState: DrawerState, navController: 
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun StartScreenContainer(modifier: Modifier, navController: NavController, scope: CoroutineScope) {
+fun StartScreenContainer(modifier: Modifier, navController: NavController) {
     var state by remember { mutableStateOf(0) }
     val titles = listOf("Действующие", "Архив")
     val pagerState = rememberPagerState {
@@ -122,13 +121,12 @@ fun StartScreenContainer(modifier: Modifier, navController: NavController, scope
                     contentPadding = PaddingValues(16.dp)
                 ) {
                     items(6) {
-                        CardFerma(navController = navController, scope = scope)
+                        CardFerma(navController = navController)
                     }
                 }
             }
         }
     }
-
 }
 
 @Composable
@@ -165,12 +163,12 @@ fun CardIncubator() {
 }
 
 @Composable
-fun CardFerma(navController: NavController, scope: CoroutineScope) {
+fun CardFerma(navController: NavController) {
     Card(
         modifier = Modifier
             .padding(8.dp)
             .clickable {
-                navController.navigate("MyFerma")
+                navController.navigate("Ferma")
             },
         elevation = CardDefaults.cardElevation(10.dp),
         colors = CardDefaults.cardColors()
@@ -211,7 +209,6 @@ fun StartScreenContainerPrewie(
     StartScreenContainer(
         modifier = Modifier.fillMaxSize(),
         navController = navController,
-        scope = scope
     )
 }
 
@@ -224,5 +221,5 @@ fun StartScreenPrewie(
     scope: CoroutineScope = rememberCoroutineScope()
 
 ) {
-    StartScreen(scope, drawerState, navController)
+    StartScreen(navController)
 }

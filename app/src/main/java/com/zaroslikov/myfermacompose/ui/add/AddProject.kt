@@ -24,14 +24,15 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.zaroslikov.myfermacompose.ui.TopAppBar
+import com.zaroslikov.myfermacompose.ui.TopAppBarStart
 import kotlinx.coroutines.CoroutineScope
 
 
 @Composable
-fun AddProject(scope: CoroutineScope, drawerState: DrawerState, navController: NavController) {
+fun AddProject(navController: NavController, navigateBack: () -> Unit) {
     Scaffold(
         topBar = {
-            TopAppBar(title = "Мое Хозяйство", scope = scope, drawerState = drawerState)
+            TopAppBarStart(title = "Мое Хозяйство", true, navigateUp = navigateBack )
         },
     ) { innerPadding ->
         AddProjectContainer(modifier = Modifier.padding(innerPadding), navController)
