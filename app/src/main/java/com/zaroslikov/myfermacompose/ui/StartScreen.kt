@@ -168,7 +168,7 @@ fun CardFerma(navController: NavController) {
         modifier = Modifier
             .padding(8.dp)
             .clickable {
-                navController.navigate("Ferma")
+                navController.navigate("Incubator")
             },
         elevation = CardDefaults.cardElevation(10.dp),
         colors = CardDefaults.cardColors()

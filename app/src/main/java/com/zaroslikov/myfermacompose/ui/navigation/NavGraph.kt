@@ -5,7 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.zaroslikov.myfermacompose.ui.Incubator.NowIncubator
+import com.zaroslikov.myfermacompose.ui.Incubator.Incubator
 import com.zaroslikov.myfermacompose.ui.MyAppFerma
 import com.zaroslikov.myfermacompose.ui.StartScreen
 import com.zaroslikov.myfermacompose.ui.add.AddIncubator
@@ -57,9 +57,9 @@ fun Nav(navController: NavHostController) {
             Ferma()
         }
 //
-//        composable(route = "MyFerma") {
-//            Container(scope = scope, drawerState = drawerState, navController = navController, selectedItem = selectedItem)
-//        }
+        composable(route = "Incubator") {
+            Incubator(navigateBack = { navController.popBackStack() })
+        }
 //
 //        composable(route = "Add") {
 //            AddProduct(scope = scope, drawerState = drawerState, navController = navController, selectedItem = selectedItem)

@@ -58,8 +58,6 @@ import com.zaroslikov.myfermacompose.ui.navigation.Nav
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MyAppFerma() {
     val navController: NavHostController = rememberNavController()
@@ -89,6 +87,37 @@ fun TopAppBarStart(title: String, canNavigateBack: Boolean, navigateUp: () -> Un
         },
         actions = {
             IconButton(onClick = {}) {
+                Icon(
+                    imageVector = Icons.Filled.Settings,
+                    contentDescription = "Настройка"
+                )
+            }
+        }
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun TopAppBarIncubator(title: String, canNavigateBack: Boolean, navigateUp: () -> Unit = {}, showBottom: MutableState<Boolean>) {
+    CenterAlignedTopAppBar(
+        colors = TopAppBarDefaults.largeTopAppBarColors(
+            titleContentColor = MaterialTheme.colorScheme.primary,
+        ),
+        title = {
+            Text(text = title)
+        },
+        navigationIcon = {
+            if (canNavigateBack) {
+                IconButton(onClick = navigateUp) {
+                    Icon(
+                        imageVector = Icons.Filled.ArrowBack,
+                        contentDescription = "Назад"
+                    )
+                }
+            }
+        },
+        actions = {
+            IconButton(onClick = {showBottom.value = true}) {
                 Icon(
                     imageVector = Icons.Filled.Settings,
                     contentDescription = "Настройка"
@@ -136,7 +165,7 @@ fun TopAppBarFerma(
                 if (filterSheet) {
                     Image(
                         painter = painterResource(id = R.drawable.baseline_filter_list_24),
-                        contentDescription = "Фильтер"
+                        contentDescription = "Фильтр"
                     )
                 } else {
                     Icon(
