@@ -1,15 +1,24 @@
 package com.zaroslikov.myfermacompose.ui.navigator.animal
 
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -25,6 +34,7 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -38,6 +48,10 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
@@ -46,6 +60,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.zaroslikov.myfermacompose.R
 import com.zaroslikov.myfermacompose.ui.DrawerSheet
 import com.zaroslikov.myfermacompose.ui.FilterProductSheet
 import com.zaroslikov.myfermacompose.ui.TopAppBarFerma
@@ -56,7 +71,10 @@ import kotlinx.coroutines.CoroutineScope
 fun Animal(scope: CoroutineScope, drawerState: DrawerState, navController: NavController) {
 
 //запоминает состояние для BottomSheet
-    val sheetState = rememberModalBottomSheetState()
+    val sheetState = rememberModalBottomSheetState(
+        skipPartiallyExpanded = true
+
+    )
     val showBottomSheet = remember { mutableStateOf(false) }
     val showBottomSheetFilter = remember { mutableStateOf(false) }
     ModalNavigationDrawer(
@@ -89,23 +107,26 @@ fun Animal(scope: CoroutineScope, drawerState: DrawerState, navController: NavCo
                 modifier = Modifier.padding(innerPadding),
                 showBottom = showBottomSheet,
                 showBottomFilter = showBottomSheetFilter,
-                navController = navController
+                navController = navController,
+                sheetState = sheetState
             )
         }
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AnimalContainer(
     modifier: Modifier,
     showBottom: MutableState<Boolean>,
     showBottomFilter: MutableState<Boolean>,
-    navController: NavController
+    navController: NavController,
+    sheetState: SheetState
 ) {
 
     LazyVerticalGrid(columns = GridCells.Fixed(1), modifier = modifier) {
         items(30) {
-            AnimalCard(navController = navController)
+            AnimalCardScroll(navController = navController)
         }
     }
     if (showBottomFilter.value) {
@@ -116,7 +137,8 @@ fun AnimalContainer(
 
     if (showBottom.value) {
         AddAnimalSheet(
-            showBottom = showBottom
+            showBottom = showBottom,
+            sheetState = sheetState
         )
     }
 
@@ -126,10 +148,14 @@ fun AnimalContainer(
 @Composable
 fun AddAnimalSheet(
     showBottom: MutableState<Boolean>,
+    sheetState: SheetState
 ) {
     //запоминает состояние для BottomShee
 
-//    ModalBottomSheet(onDismissRequest = { showBottom.value = false }) {
+//    ModalBottomSheet(
+//        onDismissRequest = { showBottom.value = false },
+//        sheetState = sheetState,
+//    ) {
     var text by rememberSaveable { mutableStateOf("") }
     Column(modifier = Modifier.padding(5.dp, 5.dp)) {
 
@@ -142,53 +168,111 @@ fun AddAnimalSheet(
                 Text("Укажите имя или группу животных")
             }
         )
-
+        OutlinedTextField(
+            value = text,
+            onValueChange = { text = it },
+            label = { Text("Тип") },
+            modifier = Modifier.fillMaxWidth(),
+            supportingText = {
+                Text("Укажите или выберите тип животного")
+            },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+//            isError = () TODO
+        )
+        OutlinedTextField(
+            value = text,
+            onValueChange = { text = it },
+            label = { Text("Пол") },
+            modifier = Modifier.fillMaxWidth(),
+            supportingText = {
+                Text("Выберите пол, если вы заносите стаю, то выберите неизвестно")
+            },
+            suffix = { Text(text = "Шт.") },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+//            isError = () TODO
+        )
         OutlinedTextField(
             value = text,
             onValueChange = { text = it },
             label = { Text("Вес") },
             modifier = Modifier.fillMaxWidth(),
             supportingText = {
-                Text("Укажите кол-во товара, которое хотите сохранить на склад")
+                Text("Укажите вес животного")
             },
-            suffix = { Text(text = "Шт.") },
+            suffix = { Text(text = "кг.") },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
 //            isError = () TODO
         )
+
         OutlinedTextField(
             value = text,
             onValueChange = { text = it },
             label = { Text("Количество") },
             modifier = Modifier.fillMaxWidth(),
             supportingText = {
-                Text("Укажите кол-во товара, которое хотите сохранить на склад")
+                Text("Укажите кол-во животных, если у Вас стая")
             },
             suffix = { Text(text = "Шт.") },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
 //            isError = () TODO
         )
+
         OutlinedTextField(
             value = text,
             onValueChange = { text = it },
-            label = { Text("Количество") },
+            label = { Text("Дата рождения") },
             modifier = Modifier.fillMaxWidth(),
             supportingText = {
-                Text("Укажите кол-во товара, которое хотите сохранить на склад")
+                Text("Укажите дату рождения или дату покупки")
             },
-            suffix = { Text(text = "Шт.") },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            trailingIcon = {
+                Image(
+                    painter = painterResource(id = R.drawable.baseline_calendar_month_24),
+                    contentDescription = "Период"
+                )
+            }
 //            isError = () TODO
         )
         OutlinedTextField(
             value = text,
             onValueChange = { text = it },
-            label = { Text("Количество") },
+            label = { Text("Прививка") },
             modifier = Modifier.fillMaxWidth(),
             supportingText = {
-                Text("Укажите кол-во товара, которое хотите сохранить на склад")
+                Text("Укажите дату, когда была сделана прививка")
             },
-            suffix = { Text(text = "Шт.") },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            trailingIcon = {
+                Image(
+                    painter = painterResource(id = R.drawable.baseline_calendar_month_24),
+                    contentDescription = "Период"
+                )
+            }
+//            isError = () TODO
+        )
+        OutlinedTextField(
+            value = text,
+            onValueChange = { text = it },
+            label = { Text("Примечание") },
+            modifier = Modifier.fillMaxWidth(),
+            supportingText = {
+                Text("Укажите примечания")
+            },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+
+//            isError = () TODO
+        )
+        OutlinedTextField(
+            value = text,
+            onValueChange = { text = it },
+            label = { Text("Картинка") },
+            modifier = Modifier.fillMaxWidth(),
+            supportingText = {
+                Text("Загрузите картинку")
+            },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+
 //            isError = () TODO
         )
         Row(
@@ -204,16 +288,15 @@ fun AddAnimalSheet(
         }
     }
 }
-//}
 
 
 @Composable
-fun AnimalCard(navController: NavController) {
+fun AnimalCardScroll(navController: NavController) {
     Card(
         modifier = Modifier
             .padding(8.dp)
             .clickable {
-                navController.navigate("OneEditAdd")
+                navController.navigate("AnimalCard")
             },
         elevation = CardDefaults.cardElevation(10.dp),
         colors = CardDefaults.cardColors()
@@ -222,15 +305,26 @@ fun AnimalCard(navController: NavController) {
             modifier = Modifier
                 .fillMaxWidth()
                 .wrapContentHeight(),
-            horizontalArrangement = Arrangement.SpaceBetween,
+            horizontalArrangement = Arrangement.Start,
             verticalAlignment = Alignment.CenterVertically
         ) {
 
+            Image(
+                painter = painterResource(id = R.drawable.moroska),
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .size(125.dp)
+                    .padding(10.dp)
+                    .clip(CircleShape)
+                    .border(1.dp, Color.White, shape = CircleShape)
+            )
+
+
             Column {
                 Text(
-                    text = "Яйца",
+                    text = "Морошка",
                     modifier = Modifier
-                        .fillMaxWidth(0.16f)
                         .padding(6.dp),
                     fontWeight = FontWeight.SemiBold,
                 )
@@ -239,20 +333,9 @@ fun AnimalCard(navController: NavController) {
                     text = "Дата: 02.05.2024",
                     textAlign = TextAlign.Center,
                     modifier = Modifier
-                        .wrapContentSize()
                         .padding(6.dp)
                 )
             }
-
-            Text(
-                text = "30 шт.",
-                textAlign = TextAlign.Center,
-                modifier = Modifier
-                    .fillMaxWidth(0.3f)
-                    .padding(6.dp),
-                fontWeight = FontWeight.Black,
-                fontSize = 18.sp
-            )
         }
     }
 }
@@ -261,7 +344,7 @@ fun AnimalCard(navController: NavController) {
 @Preview(showBackground = true)
 @Composable
 fun AnimalCardPrewie() {
-    AnimalCard(navController = rememberNavController())
+    AnimalCardScroll(navController = rememberNavController())
 }
 
 
@@ -275,8 +358,12 @@ fun AnimalPrewie() {
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Preview(showBackground = true)
 @Composable
 fun AddProductSheetPrewie() {
-    AddAnimalSheet(showBottom = remember { mutableStateOf(true) })
+    AddAnimalSheet(
+        showBottom = remember { mutableStateOf(true) },
+        sheetState = rememberModalBottomSheetState()
+    )
 }

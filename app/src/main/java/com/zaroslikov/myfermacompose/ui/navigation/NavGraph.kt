@@ -20,6 +20,7 @@ import com.zaroslikov.myfermacompose.ui.navigator.OneCardEdit
 import com.zaroslikov.myfermacompose.ui.navigator.SaleProduct
 import com.zaroslikov.myfermacompose.ui.navigator.WareHouse
 import com.zaroslikov.myfermacompose.ui.navigator.WriteOffProduct
+import com.zaroslikov.myfermacompose.ui.navigator.animal.Animal
 import kotlinx.coroutines.CoroutineScope
 
 @Composable
@@ -168,6 +169,9 @@ fun NavFerma(navController: NavHostController, scope: CoroutineScope, drawerStat
                 route = "WriteOff",
                 title = "Мои Списания"
             )
+        }
+        composable(route = "Animal") {
+            Animal(scope = scope, drawerState = drawerState, navController = navController)
         }
     }
 }

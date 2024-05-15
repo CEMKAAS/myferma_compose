@@ -52,9 +52,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.zaroslikov.myfermacompose.R
-import com.zaroslikov.myfermacompose.ui.navigator.ContainerApp
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 
 @Composable
 fun StartScreen(navController: NavController) {
@@ -168,7 +166,7 @@ fun CardFerma(navController: NavController) {
         modifier = Modifier
             .padding(8.dp)
             .clickable {
-                navController.navigate("Incubator")
+                navController.navigate("Ferma")
             },
         elevation = CardDefaults.cardElevation(10.dp),
         colors = CardDefaults.cardColors()
