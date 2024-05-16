@@ -1,10 +1,10 @@
-package com.zaroslikov.myfermacompose.data
+package com.zaroslikov.myfermacompose.data.ferma
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "МyFermaEXPENSES")
-class ExpensesTable (
+@Entity(tableName = "МyFermaWRITEOFF")
+class WriteOffTable (
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
     val title: String, // название
@@ -12,5 +12,6 @@ class ExpensesTable (
     val day: Int,  // день
     val mount: Int, // месяц
     val year: Int, // время
-    val priceAll: String
+    val status: Int,
+    val idPT: Int
 )

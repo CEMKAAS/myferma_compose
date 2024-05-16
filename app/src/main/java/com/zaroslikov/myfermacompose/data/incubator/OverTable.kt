@@ -39,4 +39,5 @@ data class OverTable(
     val dayOverTurn28: String, // название
     val dayOverTurn29: String, // название
     val dayOverTurn30: String, // название
+    val idPT: Int
 )

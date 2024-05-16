@@ -38,5 +38,6 @@ val dayAiring26: String, // название
 val dayAiring27: String, // название
 val dayAiring28: String, // название
 val dayAiring29: String, // название
-val dayAiring30: String // название
+val dayAiring30: String, // название
+val idPT: Int
 )

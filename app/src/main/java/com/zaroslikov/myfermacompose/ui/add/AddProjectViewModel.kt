@@ -1,25 +1,28 @@
-package com.zaroslikov.myfermacompose.ui
+package com.zaroslikov.myfermacompose.ui.add
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.zaroslikov.myfermacompose.FermaApplication
+import com.zaroslikov.myfermacompose.data.FermaDao
 import com.zaroslikov.myfermacompose.data.FermaRepository
 import com.zaroslikov.myfermacompose.data.ferma.ProjectTable
+import com.zaroslikov.myfermacompose.ui.StartScreenViewModel
 import kotlinx.coroutines.flow.Flow
 
-class StartScreenViewModel(private val fermaRepository: FermaRepository) : ViewModel() {
+class AddProjectViewModel(private val fermaRepository: FermaRepository) : ViewModel()  {
 
-    fun getFullSchedule(): Flow<List<ProjectTable>> {
-        return fermaRepository.getItem()
+    suspend fun insertTable(item: ProjectTable) {
+        fermaRepository.insert(item)
     }
+
 
 //    companion object {
 //        val factory: ViewModelProvider.Factory = viewModelFactory {
 //            initializer {
 //                val application = (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as FermaApplication)
-//                StartScreenViewModel(application.database.fermaDao())
+//                AddProjectViewModel(application.database.fermaDao())
 //            }
 //        }
 //    }

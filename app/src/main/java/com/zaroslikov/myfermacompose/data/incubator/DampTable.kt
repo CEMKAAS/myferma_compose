@@ -38,4 +38,6 @@ data class DampTable(
     val dayDamp28: String, // название
     val dayDamp29: String, // название
     val dayDamp30: String // название
+    ,
+    val idPT: Int
 )

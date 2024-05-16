@@ -20,4 +20,6 @@ class IncubatorTable (
     val timePush : String, // Первое уведомление
     val timePush2 : String, // Второе уведомление
     val timePush3: String // Третье уведомление
+    ,
+    val idPT: Int
 )
