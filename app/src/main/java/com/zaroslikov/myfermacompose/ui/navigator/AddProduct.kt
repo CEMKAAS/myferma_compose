@@ -1,11 +1,9 @@
 package com.zaroslikov.myfermacompose.ui.navigator
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
@@ -33,11 +31,11 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
@@ -45,26 +43,27 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.zaroslikov.myfermacompose.R
 import com.zaroslikov.myfermacompose.ui.DrawerSheet
 import com.zaroslikov.myfermacompose.ui.FilterProductSheet
-import com.zaroslikov.myfermacompose.ui.TopAppBar
 import com.zaroslikov.myfermacompose.ui.TopAppBarFerma
-import kotlinx.coroutines.CoroutineScope
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddProduct(scope: CoroutineScope, drawerState: DrawerState, navController: NavController) {
-
+fun AddProduct(
+    navController: NavController, drawerState: DrawerState
+) {
+    val scope = rememberCoroutineScope()
 //запоминает состояние для BottomSheet
     val sheetState = rememberModalBottomSheetState()
     val showBottomSheet = remember { mutableStateOf(false) }
     val showBottomSheetFilter = remember { mutableStateOf(false) }
+
+
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = {
-            DrawerSheet(scope = scope, navController = navController, drawerState = drawerState)
+            DrawerSheet(scope = scope, navController = navController, drawerState = drawerState, 3)
         },
     ) {
         Scaffold(
@@ -200,7 +199,7 @@ fun AddProductCard(navController: NavController) {
                         .fillMaxWidth(0.16f)
                         .padding(6.dp),
                     fontWeight = FontWeight.SemiBold,
-                    )
+                )
 
                 Text(
                     text = "Дата: 02.05.2024",

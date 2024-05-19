@@ -15,6 +15,7 @@ import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Button
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.DrawerState
+import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -25,32 +26,42 @@ import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.zaroslikov.myfermacompose.R
 import com.zaroslikov.myfermacompose.ui.navigation.Nav
+import com.zaroslikov.myfermacompose.ui.navigation.Screens
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @Composable
 fun MyAppFerma() {
-    val navController: NavHostController = rememberNavController()
 
-    Nav(navController = navController)
+    val navController = rememberNavController()
+    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+
+
+
+    Nav(
+        navController = navController,
+        drawerState = drawerState,
+    )
+
 }
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -85,7 +96,12 @@ fun TopAppBarStart(title: String, canNavigateBack: Boolean, navigateUp: () -> Un
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TopAppBarIncubator(title: String, canNavigateBack: Boolean, navigateUp: () -> Unit = {}, showBottom: MutableState<Boolean>) {
+fun TopAppBarIncubator(
+    title: String,
+    canNavigateBack: Boolean,
+    navigateUp: () -> Unit = {},
+    showBottom: MutableState<Boolean>
+) {
     CenterAlignedTopAppBar(
         colors = TopAppBarDefaults.largeTopAppBarColors(
             titleContentColor = MaterialTheme.colorScheme.primary,
@@ -104,7 +120,7 @@ fun TopAppBarIncubator(title: String, canNavigateBack: Boolean, navigateUp: () -
             }
         },
         actions = {
-            IconButton(onClick = {showBottom.value = true}) {
+            IconButton(onClick = { showBottom.value = true }) {
                 Icon(
                     imageVector = Icons.Filled.Settings,
                     contentDescription = "Настройка"
@@ -170,7 +186,7 @@ fun TopAppBarFerma(
 fun FilterProductSheet(
     showBottom: MutableState<Boolean>,
 ) {
-    ModalBottomSheet(onDismissRequest = { showBottom.value = false}) {
+    ModalBottomSheet(onDismissRequest = { showBottom.value = false }) {
         var text by rememberSaveable { mutableStateOf("") }
         Column(modifier = Modifier.padding(5.dp, 5.dp)) {
 
@@ -194,7 +210,12 @@ fun FilterProductSheet(
                 },
                 suffix = { Text(text = "Шт.") },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                trailingIcon = { Image(painter = painterResource(id = R.drawable.baseline_calendar_month_24), contentDescription = "Период") }
+                trailingIcon = {
+                    Image(
+                        painter = painterResource(id = R.drawable.baseline_calendar_month_24),
+                        contentDescription = "Период"
+                    )
+                }
 //            isError = () TODO
             )
             Row(
@@ -213,15 +234,15 @@ fun FilterProductSheet(
 }
 
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopAppBar(
     title: String,
-    scope: CoroutineScope,
-    drawerState: DrawerState,
+//    scope: CoroutineScope,
+//    drawerState: DrawerState,
     showBottomFilter: MutableState<Boolean>
 ) {
+    val scope = rememberCoroutineScope()
     CenterAlignedTopAppBar(
         colors = TopAppBarDefaults.largeTopAppBarColors(
             titleContentColor = MaterialTheme.colorScheme.primary,
@@ -231,18 +252,18 @@ fun TopAppBar(
         },
         navigationIcon = {
             if (title != "Мое Хозяйство") {
-                IconButton(onClick = {
-                    scope.launch {
-                        drawerState.apply {
-                            if (isClosed) open() else close()
-                        }
-                    }
-                }) {
-                    Icon(
-                        imageVector = Icons.Filled.Menu,
-                        contentDescription = "Localized description"
-                    )
-                }
+//                IconButton(onClick = {
+//                    scope.launch {
+//                        drawerState.apply {
+//                            if (isClosed) open() else close()
+//                        }
+//                    }
+//                }) {
+//                    Icon(
+//                        imageVector = Icons.Filled.Menu,
+//                        contentDescription = "Localized description"
+//                    )
+//                }
             }
         },
         actions = {
@@ -346,11 +367,12 @@ fun DrawerSheet(
     scope: CoroutineScope,
     navController: NavController,
     drawerState: DrawerState,
+    x: Int
 ) {
     val drawerItems = listOf(
 
         DrawerItems(
-            R.drawable.baseline_arrow_back_24, "Вернуться к проектам", "Start"
+            R.drawable.baseline_arrow_back_24, "Вернуться к проектам", Screens.StartRoute.route
         ),
         DrawerItems(
             R.drawable.baseline_warehouse_24, "Мой Склад", "MyFerma"
@@ -381,7 +403,7 @@ fun DrawerSheet(
 
 
     var selectedItem by remember {
-        mutableStateOf(drawerItems[1])
+        mutableStateOf(drawerItems[x])
     }
 
     ModalDrawerSheet() {

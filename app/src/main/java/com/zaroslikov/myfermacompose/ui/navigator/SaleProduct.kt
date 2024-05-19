@@ -4,7 +4,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
@@ -17,7 +16,6 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Checkbox
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
@@ -27,17 +25,16 @@ import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.semantics.Role.Companion.Checkbox
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
@@ -48,20 +45,20 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.zaroslikov.myfermacompose.ui.DrawerSheet
 import com.zaroslikov.myfermacompose.ui.FilterProductSheet
-import com.zaroslikov.myfermacompose.ui.TopAppBar
 import com.zaroslikov.myfermacompose.ui.TopAppBarFerma
-import kotlinx.coroutines.CoroutineScope
 
 @Composable
-fun SaleProduct(scope: CoroutineScope, drawerState: DrawerState, navController: NavController) {
-
+fun SaleProduct(
+    navController: NavController, drawerState: DrawerState
+) {
+    val scope = rememberCoroutineScope()
     val showBottomSheet = remember { mutableStateOf(false) }
     val showBottomSheetFilter = remember { mutableStateOf(false) }
     //запоминает состояние для BottomSheet
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = {
-            DrawerSheet(scope = scope, navController = navController, drawerState = drawerState)
+            DrawerSheet(scope = scope, navController = navController, drawerState = drawerState,4)
         },
     ) {
         Scaffold(

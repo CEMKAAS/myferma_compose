@@ -13,7 +13,7 @@ data class ProjectTable(
     val titleProject: String, // название
     val dateBegin: String, // Начало проекта
     val dateFinal: String,  // Конец проекта
-    val picture: Int, // Изображение
+    val picture: ByteArray, // Изображение
     val status: Int, // Статус
     val mode: Int //Инкубатор = 0, Хозяйство = 1
 )

@@ -5,14 +5,12 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -34,6 +32,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -45,18 +44,17 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.zaroslikov.myfermacompose.ui.DrawerSheet
 import com.zaroslikov.myfermacompose.ui.FilterProductSheet
-import com.zaroslikov.myfermacompose.ui.TopAppBar
 import com.zaroslikov.myfermacompose.ui.TopAppBarFerma
-import kotlinx.coroutines.CoroutineScope
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Expenses(scope: CoroutineScope, drawerState: DrawerState, navController:NavController) {
-
+fun Expenses(
+    navController: NavController, drawerState: DrawerState
+) {
+    val scope = rememberCoroutineScope()
 //запоминает состояние для BottomSheet
     val sheetState = rememberModalBottomSheetState()
     val showBottomSheet = remember { mutableStateOf(false) }
@@ -64,7 +62,7 @@ fun Expenses(scope: CoroutineScope, drawerState: DrawerState, navController:NavC
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = {
-            DrawerSheet(scope = scope, navController = navController, drawerState = drawerState)
+            DrawerSheet(scope = scope, navController = navController, drawerState = drawerState, 4)
         },
     ) {
         Scaffold(
@@ -163,22 +161,22 @@ fun ExpensesCard(navController: NavController) {
             }
 
 
-                Text(
-                    text = "30",
-                    textAlign = TextAlign.Center,
-                    fontWeight = FontWeight.Black,
-                    fontSize = 18.sp
-                )
+            Text(
+                text = "30",
+                textAlign = TextAlign.Center,
+                fontWeight = FontWeight.Black,
+                fontSize = 18.sp
+            )
 
-                Text(
-                    text = "30 ₽",
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier
-                        .padding(6.dp)
-                        .padding(end = 10.dp),
-                    fontWeight = FontWeight.Black,
-                    fontSize = 18.sp
-                )
+            Text(
+                text = "30 ₽",
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .padding(6.dp)
+                    .padding(end = 10.dp),
+                fontWeight = FontWeight.Black,
+                fontSize = 18.sp
+            )
         }
     }
 }

@@ -11,10 +11,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.DrawerState
-import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -25,17 +23,19 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.zaroslikov.myfermacompose.ui.TopAppBar
-import kotlinx.coroutines.CoroutineScope
+import androidx.navigation.NavController
 
 
 @Composable
-fun Finance(scope: CoroutineScope, drawerState: DrawerState) {
+fun Finance(
+    navController: NavController, drawerState: DrawerState
+) {
+    val scope = rememberCoroutineScope()
     val showBottomSheetFilter = remember { mutableStateOf(false) }
     Scaffold(
-        topBar = {
-            TopAppBar(title = "Мои Финансы", scope = scope, drawerState = drawerState, showBottomSheetFilter)
-        }
+//        topBar = {
+//            TopAppBar(title = "Мои Финансы", scope = scope, drawerState = drawerState, showBottomSheetFilter)
+//        }
     ) { innerPadding ->
         FinanceApp(modifier = Modifier
             .padding(innerPadding)
@@ -182,11 +182,11 @@ fun FinanceApp(modifier: Modifier) {
         }
     }
 }
-@Preview(showBackground = true)
-@Composable
-fun FinancePrewie() {
-    Finance(scope = rememberCoroutineScope(), drawerState =  rememberDrawerState(initialValue = DrawerValue.Closed))
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun FinancePrewie() {
+//    Finance(scope = rememberCoroutineScope(), drawerState =  rememberDrawerState(initialValue = DrawerValue.Closed))
+//}
 
 @Preview(showBackground = true)
 @Composable

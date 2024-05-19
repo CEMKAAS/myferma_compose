@@ -34,7 +34,7 @@ import com.zaroslikov.myfermacompose.ui.TopAppBarStart
 
 
 @Composable
-fun ChooiseProject(navController: NavController, navigateBack: () -> Unit) {
+fun AddChoice(navController: NavController, navigateBack: () -> Unit) {
 
     Scaffold(
         topBar = {
@@ -145,8 +145,8 @@ fun ChooiseProjectPrewie() {
     )
 }
 
-@Preview(showBackground = true)
-@Composable
-fun ChooiPrewie() {
-    ChooiseProject(navController = rememberNavController(), navigateBack = {})
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun ChooiPrewie() {
+//    ChooiseProject(navController = rememberNavController(), navigateBack = {})
+//}
