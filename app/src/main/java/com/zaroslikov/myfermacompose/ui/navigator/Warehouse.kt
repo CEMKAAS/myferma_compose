@@ -4,25 +4,22 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -30,22 +27,30 @@ import androidx.navigation.NavController
 import com.zaroslikov.myfermacompose.data.ferma.AddTable
 import com.zaroslikov.myfermacompose.ui.AppViewModelProvider
 import com.zaroslikov.myfermacompose.ui.DrawerSheet
-import com.zaroslikov.myfermacompose.ui.StartScreenViewModel
 import com.zaroslikov.myfermacompose.ui.TopAppBarFerma
+import com.zaroslikov.myfermacompose.ui.navigation.NavigationDestination
 
+
+object ItemDetailsDestination : NavigationDestination {
+    override val route = "item_details"
+    const val itemIdArg = "itemId"
+    val routeWithArgs = "$route/{$itemIdArg}"
+}
 
 @Composable
 fun WareHouse(
-    userId: Int?, navController: NavController, drawerState: DrawerState,
+    navController: NavController, drawerState: DrawerState,
     viewModel: WarehouseViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
     val scope = rememberCoroutineScope()
     val showBottomSheetFilter = remember { mutableStateOf(false) }
 
-    viewModel.updateItemUiState(userId)
 
-    val countAD by viewModel.getFullAdd().collectAsState(emptyList())
+    val uiState = viewModel.uiState.
 
+//    viewModel.updateItemUiState(userId)
+//
+//    val countAD by viewModel.getFullAdd().collectAsState(emptyList())
 
 
     ModalNavigationDrawer(
@@ -65,14 +70,14 @@ fun WareHouse(
                 )
             },
         ) { innerPadding ->
-            ContainerApp(modifier = Modifier.padding(innerPadding), warehouseList = countAD)
+            ContainerApp(modifier = Modifier.padding(innerPadding), warehouseList = uiState.value)
         }
     }
 }
 
 
 @Composable
-fun ContainerApp(modifier: Modifier,  warehouseList:List<AddTable>) {
+fun ContainerApp(modifier: Modifier, warehouseList: State<List<AddTable>>) {
 //    val items = listOf(
 //        "Яйца",
 //        "Молоко",

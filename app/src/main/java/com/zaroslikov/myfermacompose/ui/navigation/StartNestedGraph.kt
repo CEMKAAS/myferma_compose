@@ -9,12 +9,19 @@ import com.zaroslikov.myfermacompose.ui.add.AddChoice
 import com.zaroslikov.myfermacompose.ui.add.AddIncubator
 import com.zaroslikov.myfermacompose.ui.add.AddIncubatorTwo
 import com.zaroslikov.myfermacompose.ui.add.AddProject
+import com.zaroslikov.myfermacompose.ui.navigator.ItemDetailsDestination
 
 fun NavGraphBuilder.startGraph(navController: NavController) {
 
-    navigation(startDestination = Screens.ScreenStartRoute.route, route = Screens.StartRoute.route) {
+    navigation(
+        startDestination = Screens.ScreenStartRoute.route,
+        route = Screens.StartRoute.route
+    ) {
         composable(route = Screens.ScreenStartRoute.route) {
-            StartScreen(navController = navController)
+            StartScreen(navController = navController,
+                navigateToItemUpdate = {
+                    navController.navigate("${ItemDetailsDestination.route}/${it}")
+                })
         }
 
         composable(route = Screens.ScreenChoiseRoute.route) {

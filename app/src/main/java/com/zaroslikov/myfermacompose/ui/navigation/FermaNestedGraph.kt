@@ -25,15 +25,17 @@ fun NavGraphBuilder.fermaGraph(
 
         composable(
             route = Screens.ScreenWareHouseRoute.route + "/{projectId}",
-            arguments = listOf(navArgument("projectId") {
-                type = NavType.IntType
-            }
-            )) {
-            val id = it.arguments?.getInt("projectId")
+//            arguments = listOf(navArgument("projectId") {
+//                type = NavType.IntType
+//            }
+//            )) {
+//            val id = it.arguments?.getInt("projectId")
+            {
             WareHouse(
-                id,
+//                id,
                 navController = navController,
-                drawerState = drawerState
+                drawerState = drawerState,
+
             )
         }
 

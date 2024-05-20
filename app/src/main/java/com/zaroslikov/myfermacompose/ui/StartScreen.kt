@@ -50,6 +50,7 @@ import com.zaroslikov.myfermacompose.ui.navigation.Screens
 @Composable
 fun StartScreen(
     navController: NavController,
+    navigateToItemUpdate: (Int) -> Unit,
     viewModel: StartScreenViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
     val countAD by viewModel.getFullSchedule().collectAsState(emptyList())
@@ -66,6 +67,7 @@ fun StartScreen(
     ) { innerPadding ->
         StartScreenContainer(
             modifier = Modifier.padding(innerPadding),
+            onItemClick = navigateToItemUpdate,
             navController = navController,
             projectList = countAD
         )
@@ -77,6 +79,7 @@ fun StartScreen(
 @Composable
 fun StartScreenContainer(
     modifier: Modifier,
+    onItemClick: (Int) -> Unit,
     navController: NavController,
     projectList: List<ProjectTable>
 ) {
@@ -121,13 +124,14 @@ fun StartScreenContainer(
                     contentPadding = PaddingValues(16.dp)
                 ) {
 //                    items(30) {
-                    items(projectList) {
+                    items(items = projectList, key = {it.id}) {
                         CardFerma(
-                            navController = navController,
-                            it.id,
-                            it.picture,
-                            it.titleProject,
-                            it.dateBegin
+                            projectTable = it, modifier = Modifier
+                                .padding(8.dp)
+                                .clickable {
+                                    onItemClick(it.id)
+//                                    navController.navigate(Screens.ScreenWareHouseRoute.route + "/$id")
+                                }
                         )
 //                        CardIncubator(navController = navController)
                     }
@@ -139,14 +143,9 @@ fun StartScreenContainer(
 
 
 @Composable
-fun CardFerma(navController: NavController, id: Int, picture: ByteArray, title: String, date: String) {
+fun CardFerma(projectTable: ProjectTable, modifier: Modifier = Modifier) {
     Card(
-        modifier = Modifier
-            .padding(8.dp)
-            .clickable {
-                navController.navigate(Screens.ScreenWareHouseRoute.route+"/$id")
-
-            },
+        modifier = modifier,
         elevation = CardDefaults.cardElevation(10.dp),
         colors = CardDefaults.cardColors()
     ) {
@@ -159,7 +158,7 @@ fun CardFerma(navController: NavController, id: Int, picture: ByteArray, title: 
 //            modifier = Modifier.size(194.dp)
 //        )
         Text(
-            text = title,
+            text = projectTable.titleProject,
             fontSize = 16.sp,
             fontWeight = FontWeight.Bold,
             modifier = Modifier
@@ -167,7 +166,7 @@ fun CardFerma(navController: NavController, id: Int, picture: ByteArray, title: 
                 .padding(vertical = 5.dp, horizontal = 5.dp)
         )
         Text(
-            text = date, fontSize = 15.sp,
+            text = projectTable.dateBegin, fontSize = 15.sp,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 5.dp)
