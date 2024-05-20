@@ -4,12 +4,16 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import com.zaroslikov.myfermacompose.data.ferma.AddTable
 import com.zaroslikov.myfermacompose.data.ferma.ProjectTable
 import kotlinx.coroutines.flow.Flow
 @Dao
 interface FermaDao {
     @Query("SELECT * from Project")
     fun getItem(): Flow<List<ProjectTable>>
+
+    @Query("SELECT * from МyFerma Where idPT=:id")
+    fun getWareHouse(id:Int): Flow<List<AddTable>>
 
 //    @Query("SELECT * from items")
 //    suspend fun getAllItem(): List<Item>

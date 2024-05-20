@@ -395,9 +395,9 @@ fun DrawerSheet(
         DrawerItems(
             R.drawable.baseline_bar_chart_24, "Мои Графики", "Chart"
         ),
-        DrawerItems(
-            R.drawable.baseline_cruelty_free_24, "Мои Животные", "Animal"
-        )
+//        DrawerItems(
+//            R.drawable.baseline_cruelty_free_24, "Мои Животные", "Animal"
+//        )
 
     )
 

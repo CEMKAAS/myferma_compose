@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
@@ -119,15 +120,16 @@ fun StartScreenContainer(
                     columns = GridCells.Fixed(2),
                     contentPadding = PaddingValues(16.dp)
                 ) {
-                    items(30) {
-//                    items(projectList) {
-//                        CardFerma(
-//                            navController = navController,
-//                            it.picture,
-//                            it.titleProject,
-//                            it.dateBegin
-//                        )
-                        CardIncubator(navController = navController)
+//                    items(30) {
+                    items(projectList) {
+                        CardFerma(
+                            navController = navController,
+                            it.id,
+                            it.picture,
+                            it.titleProject,
+                            it.dateBegin
+                        )
+//                        CardIncubator(navController = navController)
                     }
                 }
             }
@@ -137,12 +139,12 @@ fun StartScreenContainer(
 
 
 @Composable
-fun CardFerma(navController: NavController, picture: ByteArray, title: String, date: String) {
+fun CardFerma(navController: NavController, id: Int, picture: ByteArray, title: String, date: String) {
     Card(
         modifier = Modifier
             .padding(8.dp)
             .clickable {
-                navController.navigate("Ferma")
+                navController.navigate(Screens.ScreenWareHouseRoute.route+"/$id")
 
             },
         elevation = CardDefaults.cardElevation(10.dp),

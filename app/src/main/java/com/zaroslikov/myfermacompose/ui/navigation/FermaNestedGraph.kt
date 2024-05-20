@@ -3,7 +3,9 @@ package com.zaroslikov.myfermacompose.ui.navigation
 import androidx.compose.material3.DrawerState
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavType
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import androidx.navigation.navigation
 import com.zaroslikov.myfermacompose.ui.navigator.AddProduct
 import com.zaroslikov.myfermacompose.ui.navigator.Expenses
@@ -21,8 +23,15 @@ fun NavGraphBuilder.fermaGraph(
         route = Screens.FermaRoute.route
     ) {
 
-        composable(route = Screens.ScreenWareHouseRoute.route) {
+        composable(
+            route = Screens.ScreenWareHouseRoute.route + "/{projectId}",
+            arguments = listOf(navArgument("projectId") {
+                type = NavType.IntType
+            }
+            )) {
+            val id = it.arguments?.getInt("projectId")
             WareHouse(
+                id,
                 navController = navController,
                 drawerState = drawerState
             )
