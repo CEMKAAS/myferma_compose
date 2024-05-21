@@ -14,7 +14,6 @@ import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -26,8 +25,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
-import com.zaroslikov.myfermacompose.data.ferma.AddTable
+import com.zaroslikov.myfermacompose.data.WareHouseData
 import com.zaroslikov.myfermacompose.ui.AppViewModelProvider
 import com.zaroslikov.myfermacompose.ui.DrawerSheet
 import com.zaroslikov.myfermacompose.ui.TopAppBarFerma
@@ -43,7 +41,7 @@ object ItemDetailsDestination : NavigationDestination {
 
 @Composable
 fun WareHouse(
-    navController: NavController, drawerState: DrawerState,
+    navController: (String) -> Unit, drawerState: DrawerState,
     viewModel: WarehouseViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
     val scope = rememberCoroutineScope()
@@ -75,7 +73,7 @@ fun WareHouse(
 
 
 @Composable
-fun ContainerApp(modifier: Modifier, warehouseList: List<AddTable>) {
+fun ContainerApp(modifier: Modifier, warehouseList: List<WareHouseData>) {
 
     if (warehouseList.isEmpty()) {
         Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
@@ -96,12 +94,12 @@ fun ContainerApp(modifier: Modifier, warehouseList: List<AddTable>) {
                         horizontalArrangement = Arrangement.Center
                     ) {
                         Text(
-                            text = it.title,
+                            text = it.Title,
                             fontSize = 20.sp,
                             modifier = Modifier.fillMaxWidth(0.3f)
                         )
                         Text(
-                            text = it.count.toString(),
+                            text = it.ResultCount.toString(),
                             fontSize = 20.sp,
                             modifier = Modifier.fillMaxWidth(0.1f),
                             textAlign = TextAlign.Center

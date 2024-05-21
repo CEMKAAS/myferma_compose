@@ -9,13 +9,14 @@ sealed class Screens(val route: String){
 
 
 
+    object ScreenWareHouseRoute : Screens(route = "WareHouse")
 
     object ScreenAddRoute : Screens(route = "Add")
     object ScreenSaleRoute : Screens(route = "Sale")
     object ScreenWriteOffRoute : Screens(route = "WriteOff")
     object ScreenExpensesRoute : Screens(route = "Expenses")
 
-    object ScreenWareHouseRoute : Screens(route = "WareHouse")
+
     object ScreenFinanceRoute : Screens(route = "Finance")
     object ScreenAnimalRoute : Screens(route = "Animal")
 

@@ -7,13 +7,17 @@ import androidx.room.Query
 import com.zaroslikov.myfermacompose.data.ferma.AddTable
 import com.zaroslikov.myfermacompose.data.ferma.ProjectTable
 import kotlinx.coroutines.flow.Flow
+
 @Dao
 interface FermaDao {
     @Query("SELECT * from Project")
     fun getItem(): Flow<List<ProjectTable>>
 
     @Query("SELECT * from МyFerma Where idPT=:id")
-    fun getWareHouse(id:Int): Flow<List<AddTable>>
+    fun getAddProduct(id: Int): Flow<List<AddTable>>
+
+    @Query("SELECT МyFerma.Title, sum(МyFerma.Count) - COALESCE(sum(МyFermaSale.Count),0) - COALESCE(sum(МyFermaWRITEOFF.Count),0) AS ResultCount FROM МyFerma LEFT JOIN МyFermaSale ON МyFerma.Title = МyFermaSale.Title and МyFerma.idPT = МyFermaSale.idPT LEFT JOIN МyFermaWRITEOFF ON МyFerma.Title = МyFermaWRITEOFF.Title and МyFerma.idPT = МyFermaWRITEOFF.idPT Where МyFerma.idPT=:id")
+    fun getWareHouse(id: Int): Flow<List<WareHouseData>>
 
     // Specify the conflict strategy as IGNORE, when the user tries to add an
     // existing Item into the database Room ignores the conflict.

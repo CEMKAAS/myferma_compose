@@ -60,7 +60,7 @@ import kotlinx.coroutines.CoroutineScope
 fun Animal(
     scope: CoroutineScope,
     drawerState: DrawerState,
-    navController: NavController,
+    navController: (String) -> Unit,
     gesturesEnabled: MutableState<Boolean>
 ) {
 
@@ -101,7 +101,7 @@ fun Animal(
                 modifier = Modifier.padding(innerPadding),
                 showBottom = showBottomSheet,
                 showBottomFilter = showBottomSheetFilter,
-                navController = navController,
+//                navController = navController,
                 sheetState = sheetState
             )
         }
@@ -114,13 +114,13 @@ fun AnimalContainer(
     modifier: Modifier,
     showBottom: MutableState<Boolean>,
     showBottomFilter: MutableState<Boolean>,
-    navController: NavController,
+//    navController: NavController,
     sheetState: SheetState
 ) {
 
     LazyVerticalGrid(columns = GridCells.Fixed(1), modifier = modifier) {
         items(30) {
-            AnimalCardScroll(navController = navController)
+//            AnimalCardScroll(navController = navController)
         }
     }
     if (showBottomFilter.value) {

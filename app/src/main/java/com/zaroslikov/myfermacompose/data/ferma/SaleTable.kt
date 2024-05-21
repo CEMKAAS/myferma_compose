@@ -1,17 +1,24 @@
 package com.zaroslikov.myfermacompose.data.ferma
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "МyFermaSale")
 data class SaleTable(
-@PrimaryKey(autoGenerate = true)
-val id: Int = 0,
-val title: String, // название
-val count: Double, // Кол-во
-val day: Int,  // день
-val mount: Int, // месяц
-val year: Int, // время
-val priceAll: String,
-val idPT: Int
+    @PrimaryKey(autoGenerate = true)
+    val id: Int = 0,
+
+    @ColumnInfo(name = "Title")
+    val title: String, // название
+    @ColumnInfo(name = "Count")
+    val count: Double, // Кол-во
+
+    val day: Int,  // день
+    val mount: Int, // месяц
+    val year: Int, // время
+    val priceAll: String,
+
+    @ColumnInfo(name = "idPT")
+    val idPT: Int
 )

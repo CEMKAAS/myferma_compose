@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -29,7 +28,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -41,7 +39,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -64,7 +61,7 @@ object AddProductDestination : NavigationDestination {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddProduct(
-    navController: NavController, drawerState: DrawerState,
+    navController: (String) -> Unit, drawerState: DrawerState,
     viewModel: AddProductViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
     val scope = rememberCoroutineScope()
@@ -73,7 +70,7 @@ fun AddProduct(
     val showBottomSheet = remember { mutableStateOf(false) }
     val showBottomSheetFilter = remember { mutableStateOf(false) }
 
-    val addProductList by viewModel.uiState().collectAsState(emptyList())
+//    val addProductList by viewModel.uiState().collectAsState(emptyList())
 
     ModalNavigationDrawer(
         drawerState = drawerState,
@@ -105,8 +102,8 @@ fun AddProduct(
                 modifier = Modifier.padding(innerPadding),
                 showBottom = showBottomSheet,
                 showBottomFilter = showBottomSheetFilter,
-                navController = navController,
-                addProduct = addProductList
+//                navController = navController,
+//                addProduct = addProductList
             )
         }
     }
@@ -117,13 +114,13 @@ fun AddProductContainer(
     modifier: Modifier,
     showBottom: MutableState<Boolean>,
     showBottomFilter: MutableState<Boolean>,
-    navController: NavController,
-    addProduct: List<AddTable>
+//    navController: NavController,
+//    addProduct: List<AddTable>
 ) {
 
     LazyVerticalGrid(columns = GridCells.Fixed(1), modifier = modifier) {
-        items(addProduct) {
-            AddProductCard(navController = navController, addProduct = it)
+        items(30) {
+//            AddProductCard(navController = navController, addProduct = it)
         }
     }
 

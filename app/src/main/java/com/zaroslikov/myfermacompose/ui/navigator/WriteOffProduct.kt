@@ -59,7 +59,7 @@ import com.zaroslikov.myfermacompose.ui.TopAppBarFerma
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WriteOffProduct(
-    navController: NavController, drawerState: DrawerState
+    navController: (String) -> Unit, drawerState: DrawerState
 ) {
     val scope = rememberCoroutineScope()
 //запоминает состояние для BottomSheet
@@ -96,7 +96,7 @@ fun WriteOffProduct(
                 modifier = Modifier.padding(innerPadding),
                 showBottom = showBottomSheet,
                 showBottomFilter = showBottomSheetFilter,
-                navController = navController
+//                navController = navController
             )
         }
     }
@@ -106,12 +106,12 @@ fun WriteOffProduct(
 fun WriteOffProductContainer(
     modifier: Modifier, showBottom: MutableState<Boolean>,
     showBottomFilter: MutableState<Boolean>,
-    navController: NavController
+//    navController: NavController
 ) {
 
     LazyVerticalGrid(columns = GridCells.Fixed(1), modifier = modifier) {
         items(30) {
-            WriteOffProductCard(navController = navController)
+//            WriteOffProductCard(navController = navController)
         }
     }
 

@@ -7,7 +7,9 @@ import kotlinx.coroutines.flow.Flow
 interface FermaRepository {
 
     fun getItem(): Flow<List<ProjectTable>>
-    fun getWareHouse(id:Int): Flow<List<AddTable>>
+    fun getWareHouse(id:Int): Flow<List<WareHouseData>>
+
+    fun getAddProduct(id: Int):Flow<List<AddTable>>
 
     suspend fun insert(item:ProjectTable)
     suspend fun insertAdd(addTable: AddTable)

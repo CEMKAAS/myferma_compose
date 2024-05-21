@@ -15,7 +15,11 @@ import androidx.room.PrimaryKey
 data class AddTable(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
+
+    @ColumnInfo(name = "Title")
     val title: String, // название
+
+    @ColumnInfo(name = "Count")
     val count: Double, // Кол-во
     val day: Int,  // день
     val mount: Int, // месяц

@@ -49,7 +49,7 @@ import com.zaroslikov.myfermacompose.ui.TopAppBarFerma
 
 @Composable
 fun SaleProduct(
-    navController: NavController, drawerState: DrawerState
+    navController: (String) -> Unit, drawerState: DrawerState
 ) {
     val scope = rememberCoroutineScope()
     val showBottomSheet = remember { mutableStateOf(false) }
@@ -83,7 +83,7 @@ fun SaleProduct(
                 modifier = Modifier.padding(innerPadding),
                 showBottom = showBottomSheet,
                 showBottomFilter = showBottomSheetFilter,
-                navController = navController
+//                navController = navController
             )
         }
     }
@@ -93,12 +93,12 @@ fun SaleProduct(
 fun SaleProductContainer(
     modifier: Modifier, showBottom: MutableState<Boolean>,
     showBottomFilter: MutableState<Boolean>,
-    navController: NavController,
+//    navController: NavController,
 ) {
 
     LazyVerticalGrid(columns = GridCells.Fixed(1), modifier = modifier) {
         items(30) {
-            SaleProductCard(navController = navController)
+//            SaleProductCard(navController = navController)
         }
     }
 

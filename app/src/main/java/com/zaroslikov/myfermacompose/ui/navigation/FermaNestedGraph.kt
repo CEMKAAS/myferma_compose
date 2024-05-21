@@ -31,12 +31,57 @@ fun NavGraphBuilder.fermaGraph(
                 type = NavType.IntType
             })
         ) {
-            // val id = it.arguments?.getInt("projectId")
             WareHouse(
-                navController = navController,
+                navController = {
+                    navController.navigate(
+                        "$it"
+//                                +
+//                                "/${ItemDetailsDestination.itemIdArg}"
+                    )
+                },
                 drawerState = drawerState,
             )
         }
+    }
+
+    composable(route = AddProductDestination.route,
+        arguments = listOf(navArgument(AddProductDestination.itemIdArg) {
+            type = NavType.IntType
+        })
+    ) {
+        AddProduct(
+            navController = {
+//                navController.navigate("${it}/${AddProductDestination.itemIdArg}")
+            },
+            drawerState = drawerState
+        )
+    }
+
+
+
+    composable(route = Screens.ScreenSaleRoute.route) {
+        SaleProduct(
+            navController = {
+                navController.navigate("${it}/${ItemDetailsDestination.itemIdArg}")
+            },
+            drawerState = drawerState
+        )
+    }
+    composable(route = Screens.ScreenWriteOffRoute.route) {
+        WriteOffProduct(
+            navController = {
+                navController.navigate("${it}/${ItemDetailsDestination.itemIdArg}")
+            },
+            drawerState = drawerState
+        )
+    }
+    composable(route = Screens.ScreenExpensesRoute.route) {
+        Expenses(
+            navController = {
+                navController.navigate("${it}/${ItemDetailsDestination.itemIdArg}")
+            },
+            drawerState = drawerState
+        )
     }
 
     composable(
@@ -47,31 +92,6 @@ fun NavGraphBuilder.fermaGraph(
 
     ) {
         Finance(
-            navController = navController,
-            drawerState = drawerState
-        )
-    }
-
-    composable(route = Screens.ScreenAddRoute.route) {
-        AddProduct(
-            navController = navController,
-            drawerState = drawerState
-        )
-    }
-    composable(route = Screens.ScreenSaleRoute.route) {
-        SaleProduct(
-            navController = navController,
-            drawerState = drawerState
-        )
-    }
-    composable(route = Screens.ScreenWriteOffRoute.route) {
-        WriteOffProduct(
-            navController = navController,
-            drawerState = drawerState
-        )
-    }
-    composable(route = Screens.ScreenExpensesRoute.route) {
-        Expenses(
             navController = navController,
             drawerState = drawerState
         )

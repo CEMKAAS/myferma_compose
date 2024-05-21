@@ -44,6 +44,7 @@ import androidx.navigation.compose.rememberNavController
 import com.zaroslikov.myfermacompose.R
 import com.zaroslikov.myfermacompose.ui.navigation.Nav
 import com.zaroslikov.myfermacompose.ui.navigation.Screens
+import com.zaroslikov.myfermacompose.ui.navigator.AddProductDestination
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -53,13 +54,10 @@ fun MyAppFerma() {
     val navController = rememberNavController()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
 
-
-
     Nav(
         navController = navController,
         drawerState = drawerState,
     )
-
 }
 
 
@@ -365,7 +363,7 @@ fun TopAppBar(
 @Composable
 fun DrawerSheet(
     scope: CoroutineScope,
-    navController: NavController,
+    navController: (String) -> Unit,
     drawerState: DrawerState,
     x: Int
 ) {
@@ -381,7 +379,7 @@ fun DrawerSheet(
             R.drawable.baseline_currency_ruble_24, "Мой Финансы", "Finance"
         ),
         DrawerItems(
-            R.drawable.baseline_add_circle_outline_24, "Мои Товары", Screens.ScreenAddRoute.route
+            R.drawable.baseline_add_circle_outline_24, "Мои Товары", AddProductDestination.route
         ),
         DrawerItems(
             R.drawable.baseline_add_card_24, "Мои Продажи", "Sale"
@@ -435,7 +433,8 @@ fun DrawerSheet(
                 onClick = {
                     selectedItem = it
                     scope.launch {
-                        navController.navigate(it.route)
+                        navController(Screens.ScreenAddRoute.route)
+//                        navController.navigate(it.route)
                         drawerState.apply {
                             if (isClosed) open() else close()
                         }
