@@ -51,6 +51,7 @@ import com.zaroslikov.myfermacompose.R
 import com.zaroslikov.myfermacompose.data.ferma.ProjectTable
 import com.zaroslikov.myfermacompose.ui.AppViewModelProvider
 import com.zaroslikov.myfermacompose.ui.TopAppBarStart
+import com.zaroslikov.myfermacompose.ui.navigation.Screens
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import java.io.ByteArrayOutputStream
@@ -209,9 +210,9 @@ fun AddProjectContainer(
 //                }
 
 
-                val stream = ByteArrayOutputStream()
-                bitmap.value?.compress(Bitmap.CompressFormat.PNG, 100, stream)
-                val picture =  stream.toByteArray()
+//                val stream = ByteArrayOutputStream()
+//                bitmap.value?.compress(Bitmap.CompressFormat.PNG, 100, stream)
+//                val picture =  stream.toByteArray()
 
 
 
@@ -222,13 +223,13 @@ fun AddProjectContainer(
                             titleProject = name,
                             dateBegin = date1,
                             dateFinal = date1,
-                            picture = picture,
+//                            picture = picture,
                             status = 0,
                             mode = 1
                         )
                     )
                 }
-                navController.navigate("Start")
+                navController.navigate(Screens.ScreenStartRoute.route)
             }) {
                 Text(text = "Начать")
             }

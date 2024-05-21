@@ -381,7 +381,7 @@ fun DrawerSheet(
             R.drawable.baseline_currency_ruble_24, "Мой Финансы", "Finance"
         ),
         DrawerItems(
-            R.drawable.baseline_add_circle_outline_24, "Мои Товары", "Add"
+            R.drawable.baseline_add_circle_outline_24, "Мои Товары", Screens.ScreenAddRoute.route
         ),
         DrawerItems(
             R.drawable.baseline_add_card_24, "Мои Продажи", "Sale"

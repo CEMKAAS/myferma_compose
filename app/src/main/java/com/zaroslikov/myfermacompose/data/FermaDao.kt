@@ -15,7 +15,12 @@ interface FermaDao {
     @Query("SELECT * from МyFerma Where idPT=:id")
     fun getWareHouse(id:Int): Flow<List<AddTable>>
 
-//    @Query("SELECT * from items")
+    // Specify the conflict strategy as IGNORE, when the user tries to add an
+    // existing Item into the database Room ignores the conflict.
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAdd(addTable: AddTable)
+
+    //    @Query("SELECT * from items")
 //    suspend fun getAllItem(): List<Item>
 //
 //    @Query("SELECT * from items WHERE id = :id")

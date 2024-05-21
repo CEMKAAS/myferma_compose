@@ -7,13 +7,16 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.DrawerState
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -29,10 +32,11 @@ import com.zaroslikov.myfermacompose.ui.AppViewModelProvider
 import com.zaroslikov.myfermacompose.ui.DrawerSheet
 import com.zaroslikov.myfermacompose.ui.TopAppBarFerma
 import com.zaroslikov.myfermacompose.ui.navigation.NavigationDestination
+import com.zaroslikov.myfermacompose.ui.navigation.Screens
 
 
 object ItemDetailsDestination : NavigationDestination {
-    override val route = "item_details"
+    override val route = Screens.ScreenWareHouseRoute.route
     const val itemIdArg = "itemId"
     val routeWithArgs = "$route/{$itemIdArg}"
 }
@@ -45,13 +49,7 @@ fun WareHouse(
     val scope = rememberCoroutineScope()
     val showBottomSheetFilter = remember { mutableStateOf(false) }
 
-
-    val uiState = viewModel.uiState.
-
-//    viewModel.updateItemUiState(userId)
-//
-//    val countAD by viewModel.getFullAdd().collectAsState(emptyList())
-
+    val countAD by viewModel.uiState().collectAsState(emptyList())
 
     ModalNavigationDrawer(
         drawerState = drawerState,
@@ -70,77 +68,50 @@ fun WareHouse(
                 )
             },
         ) { innerPadding ->
-            ContainerApp(modifier = Modifier.padding(innerPadding), warehouseList = uiState.value)
+            ContainerApp(modifier = Modifier.padding(innerPadding), warehouseList = countAD)
         }
     }
 }
 
 
 @Composable
-fun ContainerApp(modifier: Modifier, warehouseList: State<List<AddTable>>) {
-//    val items = listOf(
-//        "Яйца",
-//        "Молоко",
-//        "Мясо",
-//        "Пизда",
-//        "Яйца",
-//        "Молоко",
-//        "Мясо",
-//        "Пизда",
-//        "Молоко",
-//        "Мясо",
-//        "Пизда",
-//        "Яйца",
-//        "Молоко",
-//        "Мясо",
-//        "Пизда",
-//        "Молоко",
-//        "Мясо",
-//        "Пизда",
-//        "Яйца",
-//        "Молоко",
-//        "Мясо",
-//        "Пизда",
-//        "Молоко",
-//        "Мясо",
-//        "Пизда",
-//        "Яйца",
-//        "Молоко",
-//        "Мясо",
-//        "Пизда",
-//        "Молоко",
-//        "Мясо",
-//        "Пизда",
-//        "Яйца",
-//        "Молоко",
-//        "Мясо",
-//        "Пизда"
-//    )
+fun ContainerApp(modifier: Modifier, warehouseList: List<AddTable>) {
 
-    Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
-        Text(text = "Сейчас на складе: ", fontSize = 25.sp, textAlign = TextAlign.Center)
-        Spacer(modifier = Modifier.padding(vertical = 5.dp))
-        LazyColumn(
-        ) {
-            items(warehouseList) {
-
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Center
-                ) {
-                    Text(text = it.title, fontSize = 20.sp, modifier = Modifier.fillMaxWidth(0.3f))
-                    Text(
-                        text = it.count.toString(),
-                        fontSize = 20.sp,
-                        modifier = Modifier.fillMaxWidth(0.1f),
-                        textAlign = TextAlign.Center
-                    )
-                    Text(
-                        text = "Шт.", fontSize = 20.sp
-                    )
+    if (warehouseList.isEmpty()) {
+        Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
+            Text(
+                text = "Упс, но Ваш склад пока пуст",
+                textAlign = TextAlign.Center,
+                style = MaterialTheme.typography.titleLarge
+            )
+        }
+    } else {
+        Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
+            Text(text = "Сейчас на складе: ", fontSize = 25.sp, textAlign = TextAlign.Center)
+            Spacer(modifier = Modifier.padding(vertical = 5.dp))
+            LazyColumn{
+                items(warehouseList) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        Text(
+                            text = it.title,
+                            fontSize = 20.sp,
+                            modifier = Modifier.fillMaxWidth(0.3f)
+                        )
+                        Text(
+                            text = it.count.toString(),
+                            fontSize = 20.sp,
+                            modifier = Modifier.fillMaxWidth(0.1f),
+                            textAlign = TextAlign.Center
+                        )
+                        Text(
+                            text = "Шт.", fontSize = 20.sp
+                        )
+                    }
                 }
             }
-
         }
     }
 }

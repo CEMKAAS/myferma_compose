@@ -8,6 +8,7 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.zaroslikov.myfermacompose.FermaApplication
 import com.zaroslikov.myfermacompose.ui.add.AddProjectViewModel
+import com.zaroslikov.myfermacompose.ui.navigator.AddProductViewModel
 import com.zaroslikov.myfermacompose.ui.navigator.WarehouseViewModel
 
 
@@ -29,6 +30,13 @@ object AppViewModelProvider {
 
         initializer {
             WarehouseViewModel(
+                this.createSavedStateHandle(),
+                fermaApplication().container.fermaRepository
+            )
+        }
+
+        initializer {
+            AddProductViewModel(
                 this.createSavedStateHandle(),
                 fermaApplication().container.fermaRepository
             )

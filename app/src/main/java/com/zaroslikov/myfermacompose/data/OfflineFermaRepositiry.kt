@@ -9,8 +9,8 @@ class OfflineFermaRepositiry(private val fermaDao: FermaDao) : FermaRepository {
 
 
     override fun getWareHouse(id:Int): Flow<List<AddTable>> = fermaDao.getWareHouse(id)
-
-
     override suspend fun insert(item: ProjectTable) = fermaDao.insert(item)
+    override suspend fun insertAdd(addTable: AddTable) = fermaDao.insertAdd(addTable)
+
 
 }

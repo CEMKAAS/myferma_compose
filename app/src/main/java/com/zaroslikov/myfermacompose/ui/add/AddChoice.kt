@@ -31,6 +31,7 @@ import androidx.navigation.compose.rememberNavController
 import com.zaroslikov.myfermacompose.R
 import com.zaroslikov.myfermacompose.ui.DrawerItems
 import com.zaroslikov.myfermacompose.ui.TopAppBarStart
+import com.zaroslikov.myfermacompose.ui.navigation.Screens
 
 
 @Composable
@@ -55,10 +56,10 @@ fun ChooiseProjectContainer(modifier: Modifier, navController: NavController) {
 
     val drawerItems = listOf(
         DrawerItems(
-            R.drawable.chicken, "Инкубатор", "AddIncubator"
+            R.drawable.chicken, "Инкубатор",  Screens.ScreenProjectRoute.route
         ),
         DrawerItems(
-            R.drawable.baseline_warehouse_24, "Хозяйство", "AddProject"
+            R.drawable.baseline_warehouse_24, "Хозяйство",  Screens.ScreenProjectRoute.route
         ),
     )
 
@@ -136,14 +137,14 @@ fun AddIncubatorCard(title: String, image: Int, route: String, navController: Na
 //    AddIncubatorCard()
 //}
 
-@Preview(showBackground = true)
-@Composable
-fun ChooiseProjectPrewie() {
-    ChooiseProjectContainer(
-        modifier = Modifier.fillMaxSize(),
-        navController = rememberNavController()
-    )
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun ChooiseProjectPrewie() {
+//    ChooiseProjectContainer(
+//        modifier = Modifier.fillMaxSize(),
+//        navController = rememberNavController()
+//    )
+//}
 
 //@Preview(showBackground = true)
 //@Composable
