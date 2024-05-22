@@ -1,5 +1,6 @@
 package com.zaroslikov.myfermacompose.ui.navigator
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -10,36 +11,29 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.ModalNavigationDrawer
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -47,10 +41,10 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.zaroslikov.myfermacompose.data.ferma.AddTable
 import com.zaroslikov.myfermacompose.ui.AppViewModelProvider
 import com.zaroslikov.myfermacompose.ui.DrawerSheet
-import com.zaroslikov.myfermacompose.ui.FilterProductSheet
 import com.zaroslikov.myfermacompose.ui.TopAppBarFerma
 import com.zaroslikov.myfermacompose.ui.navigation.NavigationDestination
 import com.zaroslikov.myfermacompose.ui.navigation.Screens
+import java.util.Calendar
 
 
 object AddProductDestination : NavigationDestination {
@@ -59,6 +53,7 @@ object AddProductDestination : NavigationDestination {
     val routeWithArgs = "$route/{$itemIdArg}"
 }
 
+@SuppressLint("SuspiciousIndentation")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddProduct(
@@ -75,10 +70,17 @@ fun AddProduct(
 
 //    val addProductList by viewModel.uiState().collectAsState(emptyList())
 
-    val itemsList = viewModel.sd.collectAsState(initial = emptyList())
+//    val itemsList by viewModel.sd.collectAsState()
 
+    var noteList by remember {
+        mutableStateOf(listOf<AddTable>())
+    }
 
-        ModalNavigationDrawer(
+    viewModel.getTable().observe(this) {
+        noteList = it
+    }
+
+    ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = {
             DrawerSheet(
@@ -103,7 +105,26 @@ fun AddProduct(
             floatingActionButton = {
                 ExtendedFloatingActionButton(
                     onClick = {
-                        showBottomSheet.value = true
+                        val calendar = Calendar.getInstance()
+//                        showBottomSheet.value = true
+//                        scope.launch {
+//                            viewModel.insertAddTable(
+//                                AddTable(
+//                                    id = 0,
+//                                    title = "dsd",
+//                                    count = 0.0,
+//                                    calendar[Calendar.DAY_OF_MONTH],
+//                                    (calendar[Calendar.MONTH] + 1),
+//                                    calendar[Calendar.YEAR],
+//                                    priceAll = "0",
+//                                    idPT = idProject
+//                                )
+//                            )
+//                        }
+
+                        viewModel.insertIt()
+
+
                     },
                     icon = { Icon(Icons.Filled.Add, "Добавить") },
                     text = { Text(text = "Добавить") },
@@ -115,27 +136,15 @@ fun AddProduct(
                 showBottom = showBottomSheet,
                 showBottomFilter = showBottomSheetFilter,
 //                addProduct = addProductList,
-//                insertAddTable = {
-//                    scope.launch {
-//                        viewModel.insertAddTable(
-//                            AddTable(
-//                                id = it.id,
-//                                title = it.title,
-//                                count = it.count,
-//                                day = it.day,
-//                                mount = it.mount,
-//                                year = it.year,
-//                                priceAll = it.priceAll,
-//                                idPT = idProject
-//                            )
-//                        )
-//                    }
-//                },
-                insertAddTable2 = {
-                    viewModel.insertIt()
+                insertAddTable = {
+
                 },
-                view = viewModel.itemUiState,
-                itemsList = itemsList
+//                insertAddTable2 = {
+//                    viewModel.insertIt()
+//                },
+//                view = viewModel.itemUiState,
+                itemsList = noteList
+//                itemsList.itemList
             )
         }
     }
@@ -147,108 +156,38 @@ fun AddProductContainer(
     showBottom: MutableState<Boolean>,
     showBottomFilter: MutableState<Boolean>,
 //    addProduct: List<AddTable>,
-//    insertAddTable: (AddTableInsert) -> Unit,
-    insertAddTable2: () -> Unit,
-    view: AddDetails,
-    itemsList: State<List<AddTable>>
+    insertAddTable: (AddTableInsert) -> Unit,
+//    insertAddTable2: () -> Unit,
+//    view: AddDetails,
+    itemsList: List<AddTable>
 ) {
 
     LazyColumn(modifier = modifier) {
-        items(itemsList.value) {
+        items(itemsList) {
             AddProductCard(addProduct = it)
         }
     }
 
-    if (showBottomFilter.value) {
-        FilterProductSheet(
-            showBottom = showBottomFilter
-        )
-    }
-
-    if (showBottom.value) {
-        AddProductSheet(
-            showBottom = showBottom,
+//    if (showBottomFilter.value) {
+//        FilterProductSheet(
+//            showBottom = showBottomFilter
+//        )
+//    }
+//
+//    if (showBottom.value) {
+//        AddProductSheet(
+//            showBottom = showBottom,
 //            insertAddTable = insertAddTable,
-            insertAddTable2 = insertAddTable2,
-            view = view
-        )
-    }
+//            insertAddTable2 = insertAddTable2,
+//            view = view
+//        )
+//    }
 
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun AddProductSheet(
-    showBottom: MutableState<Boolean>,
-//    insertAddTable: (AddTableInsert) -> Unit,
-    insertAddTable2: () -> Unit,
-    view: AddDetails
-) {
-    //запоминает состояние для BottomShee
-
-    ModalBottomSheet(onDismissRequest = { showBottom.value = false }) {
-        var title by rememberSaveable { mutableStateOf("") }
-        var count by rememberSaveable { mutableStateOf("") }
-
-        Column(modifier = Modifier.padding(5.dp, 5.dp)) {
-            Text(text = "Cейчас на складе: ${"Яйца - 50 шт."}", fontSize = 20.sp)
-
-            OutlinedTextField(
-                value = title,
-                onValueChange = { title = it },
-                label = { Text("Товар") },
-                modifier = Modifier.fillMaxWidth(),
-                supportingText = {
-                    Text("Введите или выберите товар")
-                }
-            )
-
-            OutlinedTextField(
-                value = count,
-                onValueChange = { count = it },
-                label = { Text("Количество") },
-                modifier = Modifier.fillMaxWidth(),
-                supportingText = {
-                    Text("Укажите кол-во товара, которое хотите сохранить на склад")
-                },
-                suffix = { Text(text = "Шт.") },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-//            isError = () TODO
-            )
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 10.dp),
-                horizontalArrangement = Arrangement.Center
-            ) {
-                Button(onClick = {
-//                    val calendar = Calendar.getInstance()
-//                    insertAddTable(
-//                        AddTableInsert(
-//                            id = 0,
-//                            title = title,
-//                            count = count.toDouble(),
-//                            calendar[Calendar.DAY_OF_MONTH],
-//                            (calendar[Calendar.MONTH] + 1),
-//                            calendar[Calendar.YEAR],
-//                            priceAll = "0"
-//                        )
-//                    )
-                    view.copy(title = title, count = count.toDouble())
-                    insertAddTable2()
-                }) {
-                    Text(text = "Добавить")
-                    //TODO Изображение
-                }
-            }
-        }
-    }
 }
 
 
 @Composable
 fun AddProductCard(
-
     addProduct: AddTable
 ) {
     Card(
@@ -299,6 +238,75 @@ fun AddProductCard(
     }
 }
 
+//
+//@OptIn(ExperimentalMaterial3Api::class)
+//@Composable
+//fun AddProductSheet(
+//    showBottom: MutableState<Boolean>,
+//    insertAddTable: (AddTableInsert) -> Unit,
+////    insertAddTable2: () -> Unit,
+////    view: AddDetails
+//) {
+//    //запоминает состояние для BottomShee
+//
+//    ModalBottomSheet(onDismissRequest = { showBottom.value = false }) {
+//        var title by rememberSaveable { mutableStateOf("") }
+//        var count by rememberSaveable { mutableStateOf("") }
+//
+//        Column(modifier = Modifier.padding(5.dp, 5.dp)) {
+//            Text(text = "Cейчас на складе: ${"Яйца - 50 шт."}", fontSize = 20.sp)
+//
+//            OutlinedTextField(
+//                value = title,
+//                onValueChange = { title = it },
+//                label = { Text("Товар") },
+//                modifier = Modifier.fillMaxWidth(),
+//                supportingText = {
+//                    Text("Введите или выберите товар")
+//                }
+//            )
+//
+//            OutlinedTextField(
+//                value = count,
+//                onValueChange = { count = it },
+//                label = { Text("Количество") },
+//                modifier = Modifier.fillMaxWidth(),
+//                supportingText = {
+//                    Text("Укажите кол-во товара, которое хотите сохранить на склад")
+//                },
+//                suffix = { Text(text = "Шт.") },
+//                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+////            isError = () TODO
+//            )
+//            Row(
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//                    .padding(vertical = 10.dp),
+//                horizontalArrangement = Arrangement.Center
+//            ) {
+//                Button(onClick = {
+//                    val calendar = Calendar.getInstance()
+//                    insertAddTable(
+//                        AddTableInsert(
+//                            id = 0,
+//                            title = title,
+//                            count = count.toDouble(),
+//                            calendar[Calendar.DAY_OF_MONTH],
+//                            (calendar[Calendar.MONTH] + 1),
+//                            calendar[Calendar.YEAR],
+//                            priceAll = "0"
+//                        )
+//                    )
+//                    view.sd
+////                    insertAddTable2()
+//                }) {
+//                    Text(text = "Добавить")
+//                    //TODO Изображение
+//                }
+//            }
+//        }
+//    }
+//}
 
 data class AddTableInsert(
     var id: Int,
