@@ -47,12 +47,14 @@ fun WareHouse(
     val scope = rememberCoroutineScope()
     val showBottomSheetFilter = remember { mutableStateOf(false) }
 
+    val idProject = viewModel.itemId
+
     val countAD by viewModel.uiState().collectAsState(emptyList())
 
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = {
-            DrawerSheet(scope = scope, navController = navController, drawerState = drawerState, 1)
+            DrawerSheet(scope = scope, navController = navController, drawerState = drawerState, 1, idProject.toString())
         }
     ) {
         Scaffold(
@@ -87,7 +89,7 @@ fun ContainerApp(modifier: Modifier, warehouseList: List<WareHouseData>) {
         Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
             Text(text = "Сейчас на складе: ", fontSize = 25.sp, textAlign = TextAlign.Center)
             Spacer(modifier = Modifier.padding(vertical = 5.dp))
-            LazyColumn{
+            LazyColumn {
                 items(warehouseList) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),

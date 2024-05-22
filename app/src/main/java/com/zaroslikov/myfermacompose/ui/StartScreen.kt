@@ -53,7 +53,9 @@ fun StartScreen(
     navigateToItemUpdate: (Int) -> Unit,
     viewModel: StartScreenViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
+
     val countAD by viewModel.getFullSchedule().collectAsState(emptyList())
+
     Scaffold(
         topBar = {
             TopAppBarStart(title = "Мое Хозяйство", canNavigateBack = false)

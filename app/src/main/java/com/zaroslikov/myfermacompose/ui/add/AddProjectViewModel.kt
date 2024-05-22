@@ -2,6 +2,7 @@ package com.zaroslikov.myfermacompose.ui.add
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.zaroslikov.myfermacompose.FermaApplication
@@ -10,6 +11,7 @@ import com.zaroslikov.myfermacompose.data.FermaRepository
 import com.zaroslikov.myfermacompose.data.ferma.ProjectTable
 import com.zaroslikov.myfermacompose.ui.StartScreenViewModel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.launch
 
 class AddProjectViewModel(private val fermaRepository: FermaRepository) : ViewModel()  {
 

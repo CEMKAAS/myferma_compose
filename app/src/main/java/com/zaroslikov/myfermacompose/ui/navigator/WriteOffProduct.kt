@@ -69,7 +69,7 @@ fun WriteOffProduct(
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = {
-            DrawerSheet(scope = scope, navController = navController, drawerState = drawerState,5)
+//            DrawerSheet(scope = scope, navController = navController, drawerState = drawerState,5)
         },
     ) {
         Scaffold(
@@ -269,8 +269,8 @@ fun WriteOffProductSheet(showBottom: MutableState<Boolean>) {
 //    WriteOffProduct(modifier = Modifier.fillMaxSize())
 //}
 
-@Preview(showBackground = true)
-@Composable
-fun WriteOffProductPrewie() {
-    WriteOffProductCard(navController = rememberNavController())
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun WriteOffProductPrewie() {
+//    WriteOffProductCard(navController = rememberNavController())
+//}

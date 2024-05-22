@@ -33,31 +33,25 @@ fun NavGraphBuilder.fermaGraph(
         ) {
             WareHouse(
                 navController = {
-                    navController.navigate(
-                        "$it"
-//                                +
-//                                "/${ItemDetailsDestination.itemIdArg}"
-                    )
+                    navController.navigate(it)
                 },
                 drawerState = drawerState,
             )
         }
     }
 
-    composable(route = AddProductDestination.route,
+    composable(route = AddProductDestination.routeWithArgs,
         arguments = listOf(navArgument(AddProductDestination.itemIdArg) {
             type = NavType.IntType
         })
     ) {
         AddProduct(
             navController = {
-//                navController.navigate("${it}/${AddProductDestination.itemIdArg}")
+                navController.navigate(it)
             },
             drawerState = drawerState
         )
     }
-
-
 
     composable(route = Screens.ScreenSaleRoute.route) {
         SaleProduct(
@@ -84,17 +78,17 @@ fun NavGraphBuilder.fermaGraph(
         )
     }
 
-    composable(
-        route = AddProductDestination.routeWithArgs,
-        arguments = listOf(navArgument(AddProductDestination.itemIdArg) {
-            type = NavType.IntType
-        })
-
-    ) {
-        Finance(
-            navController = navController,
-            drawerState = drawerState
-        )
-    }
+//    composable(
+//        route = AddProductDestination.routeWithArgs,
+//        arguments = listOf(navArgument(AddProductDestination.itemIdArg) {
+//            type = NavType.IntType
+//        })
+//
+//    ) {
+//        Finance(
+//            navController = navController,
+//            drawerState = drawerState
+//        )
+//    }
 
 }

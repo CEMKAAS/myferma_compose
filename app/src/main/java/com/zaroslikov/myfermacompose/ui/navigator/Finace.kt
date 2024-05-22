@@ -182,15 +182,15 @@ fun FinanceApp(modifier: Modifier) {
         }
     }
 }
+////@Preview(showBackground = true)
+////@Composable
+////fun FinancePrewie() {
+////    Finance(scope = rememberCoroutineScope(), drawerState =  rememberDrawerState(initialValue = DrawerValue.Closed))
+////}
+//
 //@Preview(showBackground = true)
 //@Composable
-//fun FinancePrewie() {
-//    Finance(scope = rememberCoroutineScope(), drawerState =  rememberDrawerState(initialValue = DrawerValue.Closed))
+//fun FinanceContainerPrewie() {
+//    FinanceApp(modifier = Modifier.fillMaxSize())
 //}
-
-@Preview(showBackground = true)
-@Composable
-fun FinanceContainerPrewie() {
-    FinanceApp(modifier = Modifier.fillMaxSize())
-}
-
+//

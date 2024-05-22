@@ -8,8 +8,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -28,6 +28,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.State
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -42,7 +44,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import com.zaroslikov.myfermacompose.data.ferma.AddTable
 import com.zaroslikov.myfermacompose.ui.AppViewModelProvider
 import com.zaroslikov.myfermacompose.ui.DrawerSheet
@@ -70,12 +71,23 @@ fun AddProduct(
     val showBottomSheet = remember { mutableStateOf(false) }
     val showBottomSheetFilter = remember { mutableStateOf(false) }
 
+    val idProject = viewModel.itemId
+
 //    val addProductList by viewModel.uiState().collectAsState(emptyList())
 
-    ModalNavigationDrawer(
+    val itemsList = viewModel.sd.collectAsState(initial = emptyList())
+
+
+        ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = {
-            DrawerSheet(scope = scope, navController = navController, drawerState = drawerState, 3)
+            DrawerSheet(
+                scope = scope,
+                navController = navController,
+                drawerState = drawerState,
+                3,
+                idProject.toString()
+            )
         },
     ) {
         Scaffold(
@@ -102,8 +114,28 @@ fun AddProduct(
                 modifier = Modifier.padding(innerPadding),
                 showBottom = showBottomSheet,
                 showBottomFilter = showBottomSheetFilter,
-//                navController = navController,
-//                addProduct = addProductList
+//                addProduct = addProductList,
+//                insertAddTable = {
+//                    scope.launch {
+//                        viewModel.insertAddTable(
+//                            AddTable(
+//                                id = it.id,
+//                                title = it.title,
+//                                count = it.count,
+//                                day = it.day,
+//                                mount = it.mount,
+//                                year = it.year,
+//                                priceAll = it.priceAll,
+//                                idPT = idProject
+//                            )
+//                        )
+//                    }
+//                },
+                insertAddTable2 = {
+                    viewModel.insertIt()
+                },
+                view = viewModel.itemUiState,
+                itemsList = itemsList
             )
         }
     }
@@ -114,13 +146,16 @@ fun AddProductContainer(
     modifier: Modifier,
     showBottom: MutableState<Boolean>,
     showBottomFilter: MutableState<Boolean>,
-//    navController: NavController,
-//    addProduct: List<AddTable>
+//    addProduct: List<AddTable>,
+//    insertAddTable: (AddTableInsert) -> Unit,
+    insertAddTable2: () -> Unit,
+    view: AddDetails,
+    itemsList: State<List<AddTable>>
 ) {
 
-    LazyVerticalGrid(columns = GridCells.Fixed(1), modifier = modifier) {
-        items(30) {
-//            AddProductCard(navController = navController, addProduct = it)
+    LazyColumn(modifier = modifier) {
+        items(itemsList.value) {
+            AddProductCard(addProduct = it)
         }
     }
 
@@ -132,7 +167,10 @@ fun AddProductContainer(
 
     if (showBottom.value) {
         AddProductSheet(
-            showBottom = showBottom
+            showBottom = showBottom,
+//            insertAddTable = insertAddTable,
+            insertAddTable2 = insertAddTable2,
+            view = view
         )
     }
 
@@ -142,17 +180,22 @@ fun AddProductContainer(
 @Composable
 fun AddProductSheet(
     showBottom: MutableState<Boolean>,
+//    insertAddTable: (AddTableInsert) -> Unit,
+    insertAddTable2: () -> Unit,
+    view: AddDetails
 ) {
     //запоминает состояние для BottomShee
 
     ModalBottomSheet(onDismissRequest = { showBottom.value = false }) {
-        var text by rememberSaveable { mutableStateOf("") }
+        var title by rememberSaveable { mutableStateOf("") }
+        var count by rememberSaveable { mutableStateOf("") }
+
         Column(modifier = Modifier.padding(5.dp, 5.dp)) {
             Text(text = "Cейчас на складе: ${"Яйца - 50 шт."}", fontSize = 20.sp)
 
             OutlinedTextField(
-                value = text,
-                onValueChange = { text = it },
+                value = title,
+                onValueChange = { title = it },
                 label = { Text("Товар") },
                 modifier = Modifier.fillMaxWidth(),
                 supportingText = {
@@ -161,8 +204,8 @@ fun AddProductSheet(
             )
 
             OutlinedTextField(
-                value = text,
-                onValueChange = { text = it },
+                value = count,
+                onValueChange = { count = it },
                 label = { Text("Количество") },
                 modifier = Modifier.fillMaxWidth(),
                 supportingText = {
@@ -178,7 +221,22 @@ fun AddProductSheet(
                     .padding(vertical = 10.dp),
                 horizontalArrangement = Arrangement.Center
             ) {
-                Button(onClick = { /*TODO*/ }) {
+                Button(onClick = {
+//                    val calendar = Calendar.getInstance()
+//                    insertAddTable(
+//                        AddTableInsert(
+//                            id = 0,
+//                            title = title,
+//                            count = count.toDouble(),
+//                            calendar[Calendar.DAY_OF_MONTH],
+//                            (calendar[Calendar.MONTH] + 1),
+//                            calendar[Calendar.YEAR],
+//                            priceAll = "0"
+//                        )
+//                    )
+                    view.copy(title = title, count = count.toDouble())
+                    insertAddTable2()
+                }) {
                     Text(text = "Добавить")
                     //TODO Изображение
                 }
@@ -190,14 +248,14 @@ fun AddProductSheet(
 
 @Composable
 fun AddProductCard(
-    navController: NavController,
+
     addProduct: AddTable
 ) {
     Card(
         modifier = Modifier
             .padding(8.dp)
             .clickable {
-                navController.navigate("OneEditAdd")
+//                navController.navigate("OneEditAdd")
             },
         elevation = CardDefaults.cardElevation(10.dp),
         colors = CardDefaults.cardColors()
@@ -220,7 +278,7 @@ fun AddProductCard(
                 )
 
                 Text(
-                    text = "${addProduct.day }.${addProduct.mount}.${addProduct.year}",
+                    text = "${addProduct.day}.${addProduct.mount}.${addProduct.year}",
                     textAlign = TextAlign.Center,
                     modifier = Modifier
                         .wrapContentSize()
@@ -241,6 +299,16 @@ fun AddProductCard(
     }
 }
 
+
+data class AddTableInsert(
+    var id: Int,
+    var title: String,
+    var count: Double,
+    var day: Int,
+    var mount: Int,
+    var year: Int,
+    var priceAll: String
+)
 
 //@Preview(showBackground = true)
 //@Composable

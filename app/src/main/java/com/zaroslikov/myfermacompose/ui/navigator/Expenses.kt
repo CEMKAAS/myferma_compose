@@ -62,7 +62,7 @@ fun Expenses(
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = {
-            DrawerSheet(scope = scope, navController = navController, drawerState = drawerState, 4)
+//            DrawerSheet(scope = scope, navController = navController, drawerState = drawerState, 4)
         },
     ) {
         Scaffold(
@@ -239,9 +239,9 @@ fun ExpensesSheet(showBottom: MutableState<Boolean>) {
         }
     }
 }
-
-@Preview(showBackground = true)
-@Composable
-fun ExpensesPrewie() {
-    ExpensesCard(navController = rememberNavController())
-}
+//
+//@Preview(showBackground = true)
+//@Composable
+//fun ExpensesPrewie() {
+//    ExpensesCard(navController = rememberNavController())
+//}

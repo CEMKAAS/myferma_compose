@@ -58,7 +58,7 @@ fun SaleProduct(
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = {
-            DrawerSheet(scope = scope, navController = navController, drawerState = drawerState,4)
+//            DrawerSheet(scope = scope, navController = navController, drawerState = drawerState,4)
         },
     ) {
         Scaffold(
@@ -237,11 +237,11 @@ fun SaleProductCard(navController: NavController) {
 }
 
 
-@Preview(showBackground = true)
-@Composable
-fun SaleProductCardPrewie() {
-    SaleProductCard(navController = rememberNavController())
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun SaleProductCardPrewie() {
+//    SaleProductCard(navController = rememberNavController())
+//}
 
 
 //@Preview(showBackground = true)

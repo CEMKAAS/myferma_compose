@@ -45,6 +45,7 @@ import com.zaroslikov.myfermacompose.R
 import com.zaroslikov.myfermacompose.ui.navigation.Nav
 import com.zaroslikov.myfermacompose.ui.navigation.Screens
 import com.zaroslikov.myfermacompose.ui.navigator.AddProductDestination
+import com.zaroslikov.myfermacompose.ui.navigator.ItemDetailsDestination
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -365,7 +366,8 @@ fun DrawerSheet(
     scope: CoroutineScope,
     navController: (String) -> Unit,
     drawerState: DrawerState,
-    x: Int
+    x: Int,
+    y: String
 ) {
     val drawerItems = listOf(
 
@@ -373,7 +375,7 @@ fun DrawerSheet(
             R.drawable.baseline_arrow_back_24, "Вернуться к проектам", Screens.StartRoute.route
         ),
         DrawerItems(
-            R.drawable.baseline_warehouse_24, "Мой Склад", "MyFerma"
+            R.drawable.baseline_warehouse_24, "Мой Склад", ItemDetailsDestination.route
         ),
         DrawerItems(
             R.drawable.baseline_currency_ruble_24, "Мой Финансы", "Finance"
@@ -433,7 +435,7 @@ fun DrawerSheet(
                 onClick = {
                     selectedItem = it
                     scope.launch {
-                        navController(Screens.ScreenAddRoute.route)
+                        navController("${it.route}/${y}")
 //                        navController.navigate(it.route)
                         drawerState.apply {
                             if (isClosed) open() else close()

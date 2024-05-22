@@ -15,7 +15,7 @@ class WarehouseViewModel(
 ) : ViewModel() {
 
 
-    private val itemId: Int = checkNotNull(savedStateHandle[ItemDetailsDestination.itemIdArg])
+    val itemId: Int = checkNotNull(savedStateHandle[ItemDetailsDestination.itemIdArg])
 
     fun uiState(): Flow<List<WareHouseData>> = fermaRepository.getWareHouse(itemId)
 

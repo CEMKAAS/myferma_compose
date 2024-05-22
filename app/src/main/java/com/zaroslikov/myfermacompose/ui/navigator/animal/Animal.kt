@@ -74,7 +74,7 @@ fun Animal(
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = {
-            DrawerSheet(scope = scope, navController = navController, drawerState = drawerState, 7)
+//            DrawerSheet(scope = scope, navController = navController, drawerState = drawerState, 7)
         },
     ) {
         Scaffold(
@@ -352,12 +352,12 @@ fun AnimalCardPrewie() {
 //    )
 //}
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Preview(showBackground = true)
-@Composable
-fun AddProductSheetPrewie() {
-    AddAnimalSheet(
-        showBottom = remember { mutableStateOf(true) },
-        sheetState = rememberModalBottomSheetState()
-    )
-}
+//@OptIn(ExperimentalMaterial3Api::class)
+//@Preview(showBackground = true)
+//@Composable
+//fun AddProductSheetPrewie() {
+//    AddAnimalSheet(
+//        showBottom = remember { mutableStateOf(true) },
+//        sheetState = rememberModalBottomSheetState()
+//    )
+//}
