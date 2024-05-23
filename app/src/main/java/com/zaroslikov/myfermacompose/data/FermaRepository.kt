@@ -11,6 +11,8 @@ interface FermaRepository {
 
     fun getAddProduct(id: Int):Flow<List<AddTable>>
 
+    fun getAddProductAll():Flow<List<AddTable>>
+
     suspend fun insert(item:ProjectTable)
     suspend fun insertAdd(addTable: AddTable)
 }

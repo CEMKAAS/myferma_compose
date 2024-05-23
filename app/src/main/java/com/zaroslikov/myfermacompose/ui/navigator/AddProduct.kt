@@ -30,7 +30,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -44,6 +43,7 @@ import com.zaroslikov.myfermacompose.ui.DrawerSheet
 import com.zaroslikov.myfermacompose.ui.TopAppBarFerma
 import com.zaroslikov.myfermacompose.ui.navigation.NavigationDestination
 import com.zaroslikov.myfermacompose.ui.navigation.Screens
+import kotlinx.coroutines.launch
 import java.util.Calendar
 
 
@@ -70,15 +70,15 @@ fun AddProduct(
 
 //    val addProductList by viewModel.uiState().collectAsState(emptyList())
 
-//    val itemsList by viewModel.sd.collectAsState()
+    val itemsList by viewModel.sd.collectAsState()
 
-    var noteList by remember {
-        mutableStateOf(listOf<AddTable>())
-    }
-
-    viewModel.getTable().observe(this) {
-        noteList = it
-    }
+//    var noteList by remember {
+//        mutableStateOf(listOf<AddTable>())
+//    }
+//
+//    viewModel.getTable().observe(this) {
+//        noteList = it
+//    }
 
     ModalNavigationDrawer(
         drawerState = drawerState,
@@ -106,23 +106,23 @@ fun AddProduct(
                 ExtendedFloatingActionButton(
                     onClick = {
                         val calendar = Calendar.getInstance()
-//                        showBottomSheet.value = true
-//                        scope.launch {
-//                            viewModel.insertAddTable(
-//                                AddTable(
-//                                    id = 0,
-//                                    title = "dsd",
-//                                    count = 0.0,
-//                                    calendar[Calendar.DAY_OF_MONTH],
-//                                    (calendar[Calendar.MONTH] + 1),
-//                                    calendar[Calendar.YEAR],
-//                                    priceAll = "0",
-//                                    idPT = idProject
-//                                )
-//                            )
-//                        }
+                        showBottomSheet.value = true
+                        scope.launch {
+                            viewModel.insertAddTable(
+                                AddTable(
+                                    id = 0,
+                                    title = "dsd",
+                                    count = 0.0,
+                                    calendar[Calendar.DAY_OF_MONTH],
+                                    (calendar[Calendar.MONTH] + 1),
+                                    calendar[Calendar.YEAR],
+                                    priceAll = "0",
+                                    idPT = idProject
+                                )
+                            )
+                        }
 
-                        viewModel.insertIt()
+//                        viewModel.insertIt()
 
 
                     },
@@ -143,8 +143,9 @@ fun AddProduct(
 //                    viewModel.insertIt()
 //                },
 //                view = viewModel.itemUiState,
-                itemsList = noteList
-//                itemsList.itemList
+                itemsList =
+//                noteList
+                itemsList.itemList
             )
         }
     }

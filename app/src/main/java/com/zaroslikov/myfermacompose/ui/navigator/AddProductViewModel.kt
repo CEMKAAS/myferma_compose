@@ -5,10 +5,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.zaroslikov.myfermacompose.data.FermaRepository
 import com.zaroslikov.myfermacompose.data.ferma.AddTable
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 class AddProductViewModel(
@@ -24,20 +27,20 @@ class AddProductViewModel(
 //    fun uiState(): Flow<List<AddTable>> = fermaRepository.getAddProduct(itemId)
 //    fun uiState(): Flow<List<AddTable>> = fermaRepository.getAddProduct(itemId)
 
-//    suspend fun insertAddTable(addTable: AddTable) {
-//        fermaRepository.insertAdd(addTable)
-//    }
+    suspend fun insertAddTable(addTable: AddTable) {
+        fermaRepository.insertAdd(addTable)
+    }
 
-//    val sd: StateFlow<HomeUiState> =
-//        fermaRepository.getAddProduct(itemId).map { HomeUiState(it) }.stateIn(
-//            scope = viewModelScope,
-//            started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
-//            initialValue = HomeUiState()
-//        )
+    val sd: StateFlow<HomeUiState> =
+        fermaRepository.getAddProductAll().map { HomeUiState(it) }.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
+            initialValue = HomeUiState()
+        )
 
 //    suspend fun updateHome (homeUiState: HomeUiState)
 
-    fun getTable() = fermaRepository.getAddProduct(itemId).asLiveData(viewModelScope.coroutineContext)
+//    fun getTable() = fermaRepository.getAddProduct(itemId).asLiveData(viewModelScope.coroutineContext)
 
     fun insertIt() = viewModelScope.launch {
 
