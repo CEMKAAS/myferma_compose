@@ -5,6 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
@@ -13,6 +14,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DrawerState
@@ -25,8 +27,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -53,24 +55,23 @@ object AddProductDestination : NavigationDestination {
     val routeWithArgs = "$route/{$itemIdArg}"
 }
 
-@SuppressLint("SuspiciousIndentation")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddProduct(
     navController: (String) -> Unit, drawerState: DrawerState,
     viewModel: AddProductViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
-    val scope = rememberCoroutineScope()
-//запоминает состояние для BottomSheet
-    val sheetState = rememberModalBottomSheetState()
-    val showBottomSheet = remember { mutableStateOf(false) }
-    val showBottomSheetFilter = remember { mutableStateOf(false) }
+//    val scope = rememberCoroutineScope()
+////запоминает состояние для BottomSheet
+//    val sheetState = rememberModalBottomSheetState()
+//    val showBottomSheet = remember { mutableStateOf(false) }
+//    val showBottomSheetFilter = remember { mutableStateOf(false) }
 
-    val idProject = viewModel.itemId
+//    val idProject = viewModel.itemId
 
 //    val addProductList by viewModel.uiState().collectAsState(emptyList())
 
-    val itemsList by viewModel.sd.collectAsState()
+//    val itemsList by viewModel.sd.collectAsState()
 
 //    var noteList by remember {
 //        mutableStateOf(listOf<AddTable>())
@@ -80,76 +81,100 @@ fun AddProduct(
 //        noteList = it
 //    }
 
-    ModalNavigationDrawer(
-        drawerState = drawerState,
-        drawerContent = {
-            DrawerSheet(
-                scope = scope,
-                navController = navController,
-                drawerState = drawerState,
-                3,
-                idProject.toString()
-            )
-        },
-    ) {
-        Scaffold(
-            topBar = {
-                TopAppBarFerma(
-                    title = "Мои Товары",
-                    scope = scope,
-                    drawerState = drawerState,
-                    showBottomFilter = showBottomSheetFilter,
-                    filterSheet = true
-                )
-            },
-            floatingActionButton = {
-                ExtendedFloatingActionButton(
-                    onClick = {
-                        val calendar = Calendar.getInstance()
-                        showBottomSheet.value = true
-                        scope.launch {
-                            viewModel.insertAddTable(
-                                AddTable(
-                                    id = 0,
-                                    title = "dsd",
-                                    count = 0.0,
-                                    calendar[Calendar.DAY_OF_MONTH],
-                                    (calendar[Calendar.MONTH] + 1),
-                                    calendar[Calendar.YEAR],
-                                    priceAll = "0",
-                                    idPT = idProject
-                                )
-                            )
-                        }
+//    val todoList by viewModel.todoList.observeAsState()
 
-//                        viewModel.insertIt()
+//    viewModel.uiState2.observe(con, Observer {
+//        items -> {}
+//    })
 
 
-                    },
-                    icon = { Icon(Icons.Filled.Add, "Добавить") },
-                    text = { Text(text = "Добавить") },
-                )
+    val itemsListNeco = viewModel.itemNeco().collectAsState(initial = emptyList())
+
+    LazyColumn(modifier = Modifier.fillMaxSize()) {
+        item {
+            Button(onClick = { viewModel.insertNeco() }) {
+                Text(text = "sd")
             }
-        ) { innerPadding ->
-            AddProductContainer(
-                modifier = Modifier.padding(innerPadding),
-                showBottom = showBottomSheet,
-                showBottomFilter = showBottomSheetFilter,
-//                addProduct = addProductList,
-                insertAddTable = {
-
-                },
-//                insertAddTable2 = {
-//                    viewModel.insertIt()
-//                },
-//                view = viewModel.itemUiState,
-                itemsList =
-//                noteList
-                itemsList.itemList
-            )
+        }
+        items(itemsListNeco.value) { itemsList ->
+            AddProductCard(addProduct = itemsList)
         }
     }
+
+//    ModalNavigationDrawer(
+//        drawerState = drawerState,
+//        drawerContent = {
+//            DrawerSheet(
+//                scope = scope,
+//                navController = navController,
+//                drawerState = drawerState,
+//                3,
+//                idProject.toString()
+//            )
+//        },
+//    ) {
+//        Scaffold(
+//            topBar = {
+//                TopAppBarFerma(
+//                    title = "Мои Товары",
+//                    scope = scope,
+//                    drawerState = drawerState,
+//                    showBottomFilter = showBottomSheetFilter,
+//                    filterSheet = true
+//                )
+//            },
+//            floatingActionButton = {
+//                ExtendedFloatingActionButton(
+//                    onClick = {
+////                        showBottomSheet.value = true
+//
+////                        scope.launch {
+////                            viewModel.addItem2(
+////                                AddTable(
+////                                    id = 0,
+////                                    title = "dsd",
+////                                    count = 0.0,
+////                                    calendar[Calendar.DAY_OF_MONTH],
+////                                    (calendar[Calendar.MONTH] + 1),
+////                                    calendar[Calendar.YEAR],
+////                                    priceAll = "0",
+////                                    idPT = idProject
+////                                )
+////                            )
+////                        }
+//
+////                        viewModel.insertIt()
+//
+//                        viewModel.insertNeco()
+//
+//                    },
+//                    icon = { Icon(Icons.Filled.Add, "Добавить") },
+//                    text = { Text(text = "Добавить") },
+//                )
+//            }
+//        ) { innerPadding ->
+//                AddProductContainer(
+//                    modifier = Modifier.padding(innerPadding),
+//                    showBottom = showBottomSheet,
+//                    showBottomFilter = showBottomSheetFilter,
+//        //                addProduct = addProductList,
+//                    insertAddTable = {
+//
+//                    },
+//                    viewModel = viewModel,
+//        //                insertAddTable2 = {
+//        //                    viewModel.insertIt()
+//        //                },
+//        //                view = viewModel.itemUiState,
+//                    itemsList = itemsListNeco
+//
+//        //                noteList
+//        //                itemsList.itemList
+//                )
+//            }
 }
+//    }
+
 
 @Composable
 fun AddProductContainer(
@@ -158,14 +183,16 @@ fun AddProductContainer(
     showBottomFilter: MutableState<Boolean>,
 //    addProduct: List<AddTable>,
     insertAddTable: (AddTableInsert) -> Unit,
+    viewModel: AddProductViewModel,
 //    insertAddTable2: () -> Unit,
 //    view: AddDetails,
-    itemsList: List<AddTable>
+//    itemsList: List<AddTable>
+    itemsList: State<List<AddTable>>
 ) {
 
     LazyColumn(modifier = modifier) {
-        items(itemsList) {
-            AddProductCard(addProduct = it)
+        items(itemsList.value) { itemsList ->
+            AddProductCard(addProduct = itemsList)
         }
     }
 

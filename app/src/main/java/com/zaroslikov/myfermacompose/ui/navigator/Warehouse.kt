@@ -47,14 +47,16 @@ fun WareHouse(
     val scope = rememberCoroutineScope()
     val showBottomSheetFilter = remember { mutableStateOf(false) }
 
-    val idProject = viewModel.itemId
-
-    val countAD by viewModel.uiState().collectAsState(emptyList())
+//    val idProject = viewModel.itemId
+//
+//    val countAD by viewModel.uiState().collectAsState(emptyList())
 
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = {
-            DrawerSheet(scope = scope, navController = navController, drawerState = drawerState, 1, idProject.toString())
+            DrawerSheet(scope = scope, navController = navController, drawerState = drawerState, 1,
+                1.toString()
+            )
         }
     ) {
         Scaffold(
@@ -68,53 +70,59 @@ fun WareHouse(
                 )
             },
         ) { innerPadding ->
-            ContainerApp(modifier = Modifier.padding(innerPadding), warehouseList = countAD)
+            ContainerApp(modifier = Modifier.padding(innerPadding),
+//                warehouseList = countAD
+
+            )
         }
     }
 }
 
 
 @Composable
-fun ContainerApp(modifier: Modifier, warehouseList: List<WareHouseData>) {
+fun ContainerApp(modifier: Modifier,
+//                 warehouseList: List<WareHouseData>
+)
+{
 
-    if (warehouseList.isEmpty()) {
-        Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
-            Text(
-                text = "Упс, но Ваш склад пока пуст",
-                textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.titleLarge
-            )
-        }
-    } else {
+//    if (warehouseList.isEmpty()) {
+//        Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
+//            Text(
+//                text = "Упс, но Ваш склад пока пуст",
+//                textAlign = TextAlign.Center,
+//                style = MaterialTheme.typography.titleLarge
+//            )
+//        }
+//    } else {
         Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
             Text(text = "Сейчас на складе: ", fontSize = 25.sp, textAlign = TextAlign.Center)
             Spacer(modifier = Modifier.padding(vertical = 5.dp))
             LazyColumn {
-                items(warehouseList) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.Center
-                    ) {
-                        Text(
-                            text = it.Title,
-                            fontSize = 20.sp,
-                            modifier = Modifier.fillMaxWidth(0.3f)
-                        )
-                        Text(
-                            text = it.ResultCount.toString(),
-                            fontSize = 20.sp,
-                            modifier = Modifier.fillMaxWidth(0.1f),
-                            textAlign = TextAlign.Center
-                        )
-                        Text(
-                            text = "Шт.", fontSize = 20.sp
-                        )
-                    }
-                }
+//                items(warehouseList) {
+//                    Row(
+//                        modifier = Modifier.fillMaxWidth(),
+//                        horizontalArrangement = Arrangement.Center
+//                    ) {
+//                        Text(
+//                            text = it.Title,
+//                            fontSize = 20.sp,
+//                            modifier = Modifier.fillMaxWidth(0.3f)
+//                        )
+//                        Text(
+//                            text = it.ResultCount.toString(),
+//                            fontSize = 20.sp,
+//                            modifier = Modifier.fillMaxWidth(0.1f),
+//                            textAlign = TextAlign.Center
+//                        )
+//                        Text(
+//                            text = "Шт.", fontSize = 20.sp
+//                        )
+//                    }
+//                }
             }
         }
     }
-}
+//}
 
 //@Preview(showBackground = true)
 //@Composable

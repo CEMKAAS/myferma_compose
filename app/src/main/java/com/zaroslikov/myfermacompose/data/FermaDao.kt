@@ -1,5 +1,6 @@
 package com.zaroslikov.myfermacompose.data
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -20,11 +21,21 @@ interface FermaDao {
     fun getWareHouse(id: Int): Flow<List<WareHouseData>>
 
     @Query("SELECT * from МyFerma")
-    fun getAddProductAll():Flow<List<AddTable>>
+    fun getAddProductAll(): LiveData<List<AddTable>>
+
+    @Query("SELECT * from МyFerma")
+    fun getAddProductAll2(): Flow<List<AddTable>>
+
+    @Query("SELECT * from МyFerma")
+    fun getAddProductAllNeco(): Flow<List<AddTable>>
+
     // Specify the conflict strategy as IGNORE, when the user tries to add an
     // existing Item into the database Room ignores the conflict.
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAdd(addTable: AddTable)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertAdd2(addTable: AddTable)
 
     //    @Query("SELECT * from items")
 //    suspend fun getAllItem(): List<Item>
