@@ -4,9 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.zaroslikov.myfermacompose.data.FermaRepository
-import com.zaroslikov.myfermacompose.data.WareHouseData
 import com.zaroslikov.myfermacompose.data.ferma.AddTable
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
 class WarehouseViewModel(
@@ -19,15 +17,15 @@ class WarehouseViewModel(
 //
 //    fun uiState(): Flow<List<WareHouseData>> = fermaRepository.getWareHouse(itemId)
 //
-//    init {
-//        viewModelScope.launch {
-////            val calendar = Calendar.getInstance()
-////            val timeIn =
-////                calendar[Calendar.DAY_OF_MONTH].toString() + "." + (calendar[Calendar.MONTH] + 1) + "." + calendar[Calendar.YEAR]
-//
-//                fermaRepository.insertAdd(AddTable(0,"govno", 36.0,2,5,1996,"88",1))
-//        }
-//    }
+    init {
+        viewModelScope.launch {
+//            val calendar = Calendar.getInstance()
+//            val timeIn =
+//                calendar[Calendar.DAY_OF_MONTH].toString() + "." + (calendar[Calendar.MONTH] + 1) + "." + calendar[Calendar.YEAR]
+
+                fermaRepository.insertAdd(AddTable(0,"govno", 36.0,2,5,1996,"88",1))
+        }
+    }
 
 
 

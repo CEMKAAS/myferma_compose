@@ -12,8 +12,8 @@ fun Nav(
     navController: NavController,
     drawerState: DrawerState,
 ) {
-   NavHost(navController = navController as NavHostController, startDestination = Screens.StartRoute.route){
-        startGraph(navController)
+   NavHost(navController = navController as NavHostController, startDestination = Screens.ScreenAddRoute.route){
+//        startGraph(navController)
         fermaGraph(navController, drawerState)
     }
 }

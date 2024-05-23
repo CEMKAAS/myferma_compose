@@ -1,6 +1,5 @@
 package com.zaroslikov.myfermacompose.ui.navigator
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -12,25 +11,15 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExtendedFloatingActionButton
-import androidx.compose.material3.Icon
-import androidx.compose.material3.ModalNavigationDrawer
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -41,12 +30,9 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.zaroslikov.myfermacompose.data.ferma.AddTable
 import com.zaroslikov.myfermacompose.ui.AppViewModelProvider
-import com.zaroslikov.myfermacompose.ui.DrawerSheet
-import com.zaroslikov.myfermacompose.ui.TopAppBarFerma
 import com.zaroslikov.myfermacompose.ui.navigation.NavigationDestination
 import com.zaroslikov.myfermacompose.ui.navigation.Screens
 import kotlinx.coroutines.launch
-import java.util.Calendar
 
 
 object AddProductDestination : NavigationDestination {
@@ -61,7 +47,7 @@ fun AddProduct(
     navController: (String) -> Unit, drawerState: DrawerState,
     viewModel: AddProductViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
-//    val scope = rememberCoroutineScope()
+    val scope = rememberCoroutineScope()
 ////запоминает состояние для BottomSheet
 //    val sheetState = rememberModalBottomSheetState()
 //    val showBottomSheet = remember { mutableStateOf(false) }
@@ -88,15 +74,24 @@ fun AddProduct(
 //    })
 
 
-    val itemsListNeco = viewModel.itemNeco().collectAsState(initial = emptyList())
+
+//    val itemsListNeco by viewModel.itemNeco().collectAsState(initial = emptyList())
+
+    val homeState = viewModel.state
 
     LazyColumn(modifier = Modifier.fillMaxSize()) {
         item {
-            Button(onClick = { viewModel.insertNeco() }) {
+            Button(onClick = {
+                scope.launch {
+                    viewModel.insertNeco()
+                }
+
+                homeState.itemList
+            }) {
                 Text(text = "sd")
             }
         }
-        items(itemsListNeco.value) { itemsList ->
+        items(homeState.itemList) { itemsList ->
             AddProductCard(addProduct = itemsList)
         }
     }

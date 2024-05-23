@@ -8,9 +8,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import androidx.navigation.navigation
 import com.zaroslikov.myfermacompose.ui.navigator.AddProduct
-import com.zaroslikov.myfermacompose.ui.navigator.AddProductDestination
 import com.zaroslikov.myfermacompose.ui.navigator.Expenses
-import com.zaroslikov.myfermacompose.ui.navigator.Finance
 import com.zaroslikov.myfermacompose.ui.navigator.ItemDetailsDestination
 import com.zaroslikov.myfermacompose.ui.navigator.SaleProduct
 import com.zaroslikov.myfermacompose.ui.navigator.WareHouse
@@ -21,7 +19,7 @@ fun NavGraphBuilder.fermaGraph(
 ) {
 
     navigation(
-        startDestination = Screens.ScreenWareHouseRoute.route,
+        startDestination = Screens.ScreenAddRoute.route,
         route = Screens.FermaRoute.route
     ) {
 
@@ -40,14 +38,16 @@ fun NavGraphBuilder.fermaGraph(
         }
     }
 
-    composable(route = AddProductDestination.routeWithArgs,
-        arguments = listOf(navArgument(AddProductDestination.itemIdArg) {
-            type = NavType.IntType
-        })
+    composable(route = Screens.ScreenAddRoute.route
+//    AddProductDestination.route
+//    routeWithArgs,
+//        arguments = listOf(navArgument(AddProductDestination.itemIdArg) {
+//            type = NavType.IntType
+//        })
     ) {
         AddProduct(
             navController = {
-                navController.navigate(it)
+//                navController.navigate(:"dsd")
             },
             drawerState = drawerState
         )

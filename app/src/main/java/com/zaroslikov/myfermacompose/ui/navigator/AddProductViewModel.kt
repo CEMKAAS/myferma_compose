@@ -3,19 +3,12 @@ package com.zaroslikov.myfermacompose.ui.navigator
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.zaroslikov.myfermacompose.data.FermaRepository
 import com.zaroslikov.myfermacompose.data.ferma.AddTable
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.util.Calendar
 
@@ -23,7 +16,13 @@ class AddProductViewModel(
     savedStateHandle: SavedStateHandle,
     private val fermaRepository: FermaRepository
 ) : ViewModel() {
+    var state by mutableStateOf(HomeUiState())
+        private set
 
+
+    init {
+        itemNeco()
+    }
 //    private var itemUiState by mutableStateOf(AddDetails())
 
 
@@ -59,9 +58,21 @@ class AddProductViewModel(
 //        fermaRepository.insertAdd2(item)
 //    }
 
-    fun itemNeco() : Flow<List<AddTable>> = fermaRepository.getAddProductAllNeco()
+//    private fun itemNeco(): Flow<List<AddTable>> {
+//        return fermaRepository.getAddProductAllNeco()
+//    }
 
-    fun insertNeco() = viewModelScope.launch {
+    fun itemNeco() {
+        viewModelScope.launch {
+            fermaRepository.getAddProductAll2().collectLatest {
+                state = state.copy(
+                    itemList = it
+                )
+            }
+        }
+    }
+
+    suspend fun insertNeco() {
 
         val calendar = Calendar.getInstance()
         fermaRepository.insertAdd(
@@ -75,8 +86,26 @@ class AddProductViewModel(
                 priceAll = "0",
                 idPT = 1
 
-        ))
+            )
+        )
     }
+
+
+//    init {
+//        viewModelScope.launch {
+//            fermaRepository.insert(ProjectTable(
+//                id = 0,
+//                titleProject = "Sds",
+//                dateBegin = "Sd",
+//                dateFinal = "SDs",
+////                            picture = picture,
+//                status = 0,
+//                mode = 1
+//            ))
+//        }
+//    }
+}
+
 
 //    val todoList : LiveData<List<AddTable>> = fermaRepository.getAddProductAll()
 
@@ -90,9 +119,9 @@ class AddProductViewModel(
 //        private const val TIMEOUT_MILLIS = 1_000L
 //    }
 
-}
 
-data class HomeUiState(val itemList: List<AddTable> = listOf())
+data class HomeUiState
+    (val itemList: List<AddTable> = emptyList())
 
 
 data class AddDetails(
